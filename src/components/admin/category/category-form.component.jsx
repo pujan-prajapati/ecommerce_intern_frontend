@@ -3,7 +3,7 @@ import { Button, Form, Input, Select } from "antd";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
-export const ProductForm = ({ onFinish, initialValues }) => {
+export const CategoryForm = ({ onFinish, initialValues }) => {
   const [form] = Form.useForm();
 
   const handleOnFinish = (values) => {
@@ -12,8 +12,8 @@ export const ProductForm = ({ onFinish, initialValues }) => {
   };
 
   const handleOnFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-    toast.error("Fill all fields");
+    console.log("Form Error : ", errorInfo);
+    toast.error("Fill All Fields");
   };
 
   useEffect(() => {
@@ -25,44 +25,25 @@ export const ProductForm = ({ onFinish, initialValues }) => {
   return (
     <>
       <Form
-        labelCol={{ span: 4 }}
         form={form}
+        labelCol={{ span: 4 }}
         labelAlign="left"
         onFinish={handleOnFinish}
         onFinishFailed={handleOnFinishFailed}
         initialValues={initialValues}
       >
-        {/* name */}
+        {/* name  */}
         <Form.Item
-          label="Product Name"
+          label="Category Name"
           name="name"
-          rules={[{ required: true, message: "Please input product name!" }]}
+          rules={[
+            {
+              required: true,
+              message: "Category name is required!",
+            },
+          ]}
         >
-          <Input placeholder="Product Name..." />
-        </Form.Item>
-
-        {/* price */}
-        <Form.Item
-          label="Product Price"
-          name="price"
-          rules={[{ required: true, message: "Please input product price!" }]}
-        >
-          <Input className="w-40" type="number" prefix="$" />
-        </Form.Item>
-
-        {/* status */}
-        <Form.Item
-          label="Product Status"
-          name="status"
-          rules={[{ required: true, message: "Please input product status!" }]}
-        >
-          <Select
-            placeholder="Select status"
-            options={[
-              { value: "Available", label: "Available" },
-              { value: "Sold", label: "Sold" },
-            ]}
-          />
+          <Input placeholder="Category name..." />
         </Form.Item>
 
         {/* category */}
@@ -83,21 +64,19 @@ export const ProductForm = ({ onFinish, initialValues }) => {
           />
         </Form.Item>
 
-        {/* image */}
+        {/* image  */}
         <Form.Item
-          label="Product Image"
+          label="Category Image"
           name="image"
-          rules={[{ required: true, message: "Please provide image!" }]}
+          rules={[
+            {
+              required: true,
+              message: "Category image is required!",
+            },
+          ]}
         >
-          <Input placeholder="Image string..." />
+          <Input placeholder="Image Url..." />
         </Form.Item>
-        {/* <Form.Item
-          label="Product Image"
-          valuePropName={"file"}
-          rules={[{ required: true, message: "Please provide image!" }]}
-        >
-          <Input type="file" />
-        </Form.Item> */}
 
         {/* button */}
         <Form.Item wrapperCol={{ offset: 4 }}>

@@ -1,55 +1,46 @@
+/* eslint-disable react/prop-types */
+import { Alert, Button, Spin, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateAdminBtn, AdminHeader } from "../AdminHeader";
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { useEffect } from "react";
-import { Button, Table } from "antd";
 import {
   deleteProduct,
-  fetchProduct,
+  getProductByCategory,
 } from "../../../redux/features/products/product.service";
+import { Link, useParams } from "react-router-dom";
+import { AdminHeader } from "../AdminHeader";
 import { FaPen, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 const columns = (dispatch) => [
   {
     title: "ID",
     dataIndex: "id",
-    width: 120,
   },
   {
     title: "Image",
     dataIndex: "image",
-    width: 120,
     render: (text, record) => (
       <img
         src={record.image}
         alt={record.name}
-        style={{ width: 80, height: 50, objectFit: "contain" }}
+        style={{ width: "50px", height: "50px" }}
       />
     ),
   },
   {
     title: "Name",
     dataIndex: "name",
-    width: 120,
   },
   {
     title: "Price",
     dataIndex: "price",
-    width: 120,
     render: (text) => <p>$ {text}</p>,
   },
   {
-    title: "Status",
-    dataIndex: "status",
-    width: 120,
-  },
-
-  {
     title: "Actions",
     dataIndex: "actions",
-    width: 120,
+    align: "right",
     render: (text, record) => (
       <div className="space-x-3">
         <Button
@@ -72,32 +63,31 @@ const columns = (dispatch) => [
   },
 ];
 
-export const ProductList = () => {
-  const products = useSelector(selectProduct);
+export const CategoryTable = () => {
+  const { category } = useParams();
+  const { isLoading, items, isError } = useSelector(selectProduct);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProduct());
-  }, [dispatch]);
+    dispatch(getProductByCategory(category));
+  }, [dispatch, category]);
+
+  if (isLoading) return <Spin size="large" />;
+  if (isError)
+    return <Alert message="Error" description={isError} type="error" />;
 
   return (
     <>
-      <div className="flex justify-between">
-        <AdminHeader
-          page_title="Products List"
-          base_title="Products"
-          base_href="/admin/products"
-        />
-
-        <CreateAdminBtn to="/admin/products/createproducts" />
-      </div>
-
+      <AdminHeader
+        page_title={`${category}`}
+        base_title="Category"
+        base_href="/admin/category"
+      />
       <Table
         columns={columns(dispatch)}
-        dataSource={products.items}
-        loading={products.isLoading}
+        dataSource={items}
+        loading={isLoading}
         rowKey="id"
-        pagination={{ pageSize: 5 }}
       />
     </>
   );

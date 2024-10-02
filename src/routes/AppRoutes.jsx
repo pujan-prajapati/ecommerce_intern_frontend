@@ -1,9 +1,17 @@
 import { Route, Routes } from "react-router-dom";
 import { AdminLayout } from "../layout/admin";
 import { LoginPage } from "../pages/auth/LoginPage";
-import { Dashboard, Products } from "../pages/admin";
+import { Dashboard, Products, Category } from "../pages/admin";
 
-import { ProductList, ProductCreate, ProductEdit } from "../components/admin";
+import {
+  ProductList,
+  ProductCreate,
+  ProductEdit,
+  CategoryList,
+  CategoryCreate,
+  CategoryTable,
+  CategoryEdit,
+} from "../components/admin";
 
 export const AppRoutes = () => {
   return (
@@ -20,6 +28,13 @@ export const AppRoutes = () => {
             <Route index element={<ProductList />} />
             <Route path="createproducts" element={<ProductCreate />} />
             <Route path="edit/:id" element={<ProductEdit />} />
+          </Route>
+
+          <Route path="category" element={<Category />}>
+            <Route index element={<CategoryList />} />
+            <Route path="createcategory" element={<CategoryCreate />} />
+            <Route path="edit/:id" element={<CategoryEdit />} />
+            <Route path=":category" element={<CategoryTable />} />
           </Route>
         </Route>
 

@@ -25,7 +25,7 @@ export const ProductEdit = () => {
     dispatch(getProductById(id));
   }, [dispatch, id]);
 
-  const handleOnFinish = async (formData) => {
+  const handleOnFinish = (formData) => {
     try {
       dispatch(updateProduct({ productID: id, formData }));
       toast.success("Product Updated Successfully");
@@ -36,7 +36,7 @@ export const ProductEdit = () => {
   };
 
   if (isLoading) {
-    return <Spin tip="Loading..." />;
+    return <Spin />;
   }
 
   return (

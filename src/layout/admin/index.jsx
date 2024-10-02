@@ -2,8 +2,12 @@ import { Button, Layout, Menu } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useState } from "react";
-import { FaHamburger } from "react-icons/fa";
-import { FaBagShopping, FaComputer } from "react-icons/fa6";
+import {
+  FaHamburger,
+  FaBoxes,
+  FaShoppingBag,
+  FaClipboardCheck,
+} from "react-icons/fa";
 import { Link, Outlet } from "react-router-dom";
 
 export const AdminLayout = () => {
@@ -30,13 +34,18 @@ export const AdminLayout = () => {
             items={[
               {
                 key: 1,
-                icon: <FaComputer />,
+                icon: <FaClipboardCheck />,
                 label: <Link to={"/admin"}>Dashboard</Link>,
               },
               {
                 key: 2,
-                icon: <FaBagShopping />,
+                icon: <FaShoppingBag />,
                 label: <Link to={"/admin/products"}>Products</Link>,
+              },
+              {
+                key: 3,
+                icon: <FaBoxes />,
+                label: <Link to={"/admin/category"}>Category</Link>,
               },
             ]}
           />

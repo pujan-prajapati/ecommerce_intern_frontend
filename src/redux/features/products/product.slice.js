@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getProductById,
   updateProduct,
+  getProductByCategory,
 } from "./product.service";
 
 const initialState = {
@@ -96,6 +97,20 @@ export const ProductSlice = createSlice({
       .addCase(getProductById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.selectedProduct = action.payload;
+      });
+
+    //get products by category
+    builder
+      .addCase(getProductByCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProductByCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.error.message;
+      })
+      .addCase(getProductByCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.items = action.payload;
       });
   },
 });
