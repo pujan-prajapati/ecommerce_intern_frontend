@@ -3,9 +3,11 @@ import {
   CategoryList,
   CategoryForm,
   CategoryCreate,
-  CategoryTable,
   CategoryEdit,
+  CategoryTable,
+  CategoryProductCreate,
 } from "./category";
+import { CollectionList } from "./collections";
 
 export {
   ProductList,
@@ -14,6 +16,8 @@ export {
   CategoryList,
   CategoryForm,
   CategoryCreate,
-  CategoryTable,
   CategoryEdit,
+  CategoryTable,
+  CategoryProductCreate,
+  CollectionList,
 };

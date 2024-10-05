@@ -43,6 +43,11 @@ export const updateProduct = createAsyncThunk(
   "products/updateproduct",
   async ({ productID, formData }) => {
     try {
+      if (formData.onSale === false) {
+        delete formData.salename;
+        delete formData.discountprice;
+      }
+
       const response = await axios.put(
         `${base_URL}/products/${productID}`,
         formData
@@ -66,13 +71,11 @@ export const getProductById = createAsyncThunk(
   }
 );
 
-export const getProductByCategory = createAsyncThunk(
-  "products/getproductbycategory",
-  async (category) => {
+export const getProductBySale = createAsyncThunk(
+  "products/getproductbysale",
+  async () => {
     try {
-      const response = await axios.get(
-        `${base_URL}/products?category=${category}`
-      );
+      const response = await axios.get(`${base_URL}/products?onSale=true`);
       return response.data;
     } catch (error) {
       return error;

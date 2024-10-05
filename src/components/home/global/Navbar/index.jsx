@@ -1,0 +1,75 @@
+import { Link, NavLink } from "react-router-dom";
+import { Wrapper } from "../wrapper";
+import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import { Avatar, Button, Dropdown, Input } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logoutUser,
+  selectAuth,
+} from "../../../../redux/features/auth/auth.slice";
+
+export const Navbar = () => {
+  const { items: user } = useSelector(selectAuth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  const items = [
+    { key: 1, label: <NavLink to="/orders">Orders</NavLink> },
+    { key: 2, label: <NavLink to="/wishlist">Wishlist</NavLink> },
+    ...(user && user.role === "admin"
+      ? [{ key: 3, label: <NavLink to="/admin">Dashboard</NavLink> }]
+      : []),
+    {
+      key: 4,
+      label: <p onClick={handleLogout}>Logout</p>,
+    },
+  ];
+
+  return (
+    <>
+      <nav className="bg-gray-100">
+        <Wrapper className="flex justify-between items-center">
+          <a href="/" className="text-3xl font-bold">
+            LOGO.
+          </a>
+          <div>
+            <Input className="w-[500px] rounded-r-none" prefix={<FaSearch />} />
+            <Button type="primary" className="rounded-l-none">
+              Search
+            </Button>
+          </div>
+          <div className="flex gap-5 items-center">
+            <NavLink to={"/"}>Home</NavLink>
+            <NavLink to={"/contact"}>Contact</NavLink>
+            <NavLink to={"/cart"}>
+              <FaShoppingCart />
+            </NavLink>
+
+            {user && user.token ? (
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                trigger={["click"]}
+              >
+                <Avatar icon={<FaUser />} style={{ cursor: "pointer" }} />
+              </Dropdown>
+            ) : (
+              <>
+                <Link to={"/login"}>
+                  <Button type="primary">Login</Button>
+                </Link>
+                <Link to={"/register"}>
+                  <Button type="primary">Register</Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </Wrapper>
+      </nav>
+    </>
+  );
+};

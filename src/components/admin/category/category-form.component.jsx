@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input } from "antd";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -44,24 +44,6 @@ export const CategoryForm = ({ onFinish, initialValues }) => {
           ]}
         >
           <Input placeholder="Category name..." />
-        </Form.Item>
-
-        {/* category */}
-        <Form.Item
-          label="Product Category"
-          name="category"
-          rules={[{ required: true, message: "Please input category!" }]}
-        >
-          <Select
-            placeholder="Select Category"
-            options={[
-              { value: "Shoes", label: "Shoes" },
-              { value: "Bag", label: "Bag" },
-              { value: "Cosmetics", label: "Cosmetics" },
-              { value: "T-shirt", label: "T-shirt" },
-              { value: "Stationary", label: "Stationary" },
-            ]}
-          />
         </Form.Item>
 
         {/* image  */}

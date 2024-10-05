@@ -32,36 +32,40 @@ export const CategoryList = () => {
         <CreateAdminBtn to="/admin/category/createcategory" />
       </section>
 
-      <section className="flex flex-wrap gap-4">
-        {category.items.map((item) => (
-          <div className="bg-white p-4 mb-4" key={item.id}>
-            <Link to={`/admin/category/${item.category}`}>
-              <img src={item.image} className="h-72 w-72" alt={item.name} />
-            </Link>
+      {category.items.length === 0 ? (
+        <h1 className="text-4xl text-center">No category found</h1>
+      ) : (
+        <section className="flex flex-wrap gap-4">
+          {category.items.map((item) => (
+            <div className="bg-white p-4 mb-4" key={item.id}>
+              <Link to={`/admin/category/${item.name}`}>
+                <img src={item.image} className="h-72 w-72" alt={item.name} />
+              </Link>
 
-            <div className="flex justify-between mt-2">
-              <h2 className="text-2xl text-center font-bold">{item.name}</h2>
-              <div className="flex gap-2">
-                <Button
-                  danger
-                  type="primary"
-                  onClick={() => {
-                    dispatch(deleteCategory(item.id));
-                    toast.success("Category Deleted Successfully");
-                  }}
-                >
-                  <FaTrash />
-                </Button>
-                <Link to={`/admin/category/edit/${item.id}`}>
-                  <Button type="primary">
-                    <FaPen />
+              <div className="flex justify-between mt-2">
+                <h2 className="text-2xl text-center font-bold">{item.name}</h2>
+                <div className="flex gap-2">
+                  <Button
+                    danger
+                    type="primary"
+                    onClick={() => {
+                      dispatch(deleteCategory(item.id));
+                      toast.success("Category Deleted Successfully");
+                    }}
+                  >
+                    <FaTrash />
                   </Button>
-                </Link>
+                  <Link to={`/admin/category/edit/${item.id}`}>
+                    <Button type="primary">
+                      <FaPen />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
     </>
   );
 };

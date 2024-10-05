@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, InputNumber } from "antd";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -47,40 +47,7 @@ export const ProductForm = ({ onFinish, initialValues }) => {
           name="price"
           rules={[{ required: true, message: "Please input product price!" }]}
         >
-          <Input className="w-40" type="number" prefix="$" />
-        </Form.Item>
-
-        {/* status */}
-        <Form.Item
-          label="Product Status"
-          name="status"
-          rules={[{ required: true, message: "Please input product status!" }]}
-        >
-          <Select
-            placeholder="Select status"
-            options={[
-              { value: "Available", label: "Available" },
-              { value: "Sold", label: "Sold" },
-            ]}
-          />
-        </Form.Item>
-
-        {/* category */}
-        <Form.Item
-          label="Product Category"
-          name="category"
-          rules={[{ required: true, message: "Please input category!" }]}
-        >
-          <Select
-            placeholder="Select Category"
-            options={[
-              { value: "Shoes", label: "Shoes" },
-              { value: "Bag", label: "Bag" },
-              { value: "Cosmetics", label: "Cosmetics" },
-              { value: "T-shirt", label: "T-shirt" },
-              { value: "Stationary", label: "Stationary" },
-            ]}
-          />
+          <InputNumber type="number" prefix="$" />
         </Form.Item>
 
         {/* image */}
@@ -91,13 +58,6 @@ export const ProductForm = ({ onFinish, initialValues }) => {
         >
           <Input placeholder="Image string..." />
         </Form.Item>
-        {/* <Form.Item
-          label="Product Image"
-          valuePropName={"file"}
-          rules={[{ required: true, message: "Please provide image!" }]}
-        >
-          <Input type="file" />
-        </Form.Item> */}
 
         {/* button */}
         <Form.Item wrapperCol={{ offset: 4 }}>
