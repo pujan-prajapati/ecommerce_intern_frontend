@@ -1,37 +1,62 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Spin, Upload } from "antd";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthHeader } from "../AuthHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../redux/features/auth/auth.service";
 import { selectAuth } from "../../../redux/features/auth/auth.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FaUpload } from "react-icons/fa";
 
 export const RegisterComponent = () => {
-  const { isError, isSuccess, errorMessage, errorMsg } =
+  const { isError, isSuccess, isLoading, errorMsg, registerSuccess } =
     useSelector(selectAuth);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [fileList, setFileList] = useState([]);
 
-  const handleFormFinish = (values) => {
-    dispatch(registerUser(values));
+  const handleAvatarChange = ({ fileList }) => {
+    setFileList(fileList);
   };
 
-  const handleFormFailed = (errorInfo) => {
-    console.log("Error : ", errorInfo);
+  const handleFormFinish = (values) => {
+    const formData = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      formData.append(key, values[key]);
+    });
+
+    if (fileList.length > 0) {
+      formData.append("avatar", fileList[0].originFileObj);
+    }
+
+    dispatch(registerUser(formData));
+  };
+
+  const handleFormFailed = () => {
     toast.error("Fill all fields");
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && registerSuccess) {
       toast.success("Register Success");
       navigate("/login");
       form.resetFields();
+      setFileList([]);
     } else if (isError) {
       toast.error(errorMsg || "Registeration Failed");
     }
-  }, [isSuccess, isError, errorMessage, navigate, form]);
+  }, [isSuccess, isError, errorMsg, navigate, form, registerSuccess]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Spin size="large" />
+        <p className="ml-4">Registering</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -46,6 +71,28 @@ export const RegisterComponent = () => {
           labelAlign="left"
           className="max-w-[600px] w-full"
         >
+          {/* avatar */}
+          <Form.Item
+            label="Avatar"
+            name="avatar"
+            rules={[
+              {
+                required: true,
+                message: "avatar is required",
+              },
+            ]}
+          >
+            <Upload
+              listType="picture"
+              beforeUpload={() => false} // Prevent automatic upload
+              fileList={fileList} // Pass the fileList state
+              onChange={handleAvatarChange} // Update fileList state
+              maxCount={1} // Allow only one file
+            >
+              <Button icon={<FaUpload />}>Select Avatar</Button>
+            </Upload>
+          </Form.Item>
+
           {/* username */}
           <Form.Item
             label="First Name"
@@ -146,7 +193,7 @@ export const RegisterComponent = () => {
               offset: 4,
             }}
           >
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={isLoading}>
               Submit
             </Button>
           </Form.Item>

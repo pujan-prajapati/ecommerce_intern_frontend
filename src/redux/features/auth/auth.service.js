@@ -1,22 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { main_URL } from "../../../constant/constant";
+import { handleError, setLocalStore } from "../../../helpers";
+import { httpPost } from "../../../axios";
 
 export const registerUser = createAsyncThunk(
   "registeruser",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${main_URL}/users/registerUser`,
-        formData
-      );
+      const response = await httpPost("users/registerUser", formData);
+
       return response.data;
     } catch (error) {
-      if (error.response) {
-        return rejectWithValue(error.response.data.message || "Server Error");
-      } else {
-        return rejectWithValue("Network Error. Please try again.");
-      }
+      return handleError(error, rejectWithValue);
     }
   }
 );
@@ -25,21 +19,35 @@ export const loginUser = createAsyncThunk(
   "loginuser",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${main_URL}/users/loginUser`,
-        formData
-      );
-      if (response.data) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("role", response.data.role);
+      const response = await httpPost("users/loginUser", formData);
+
+      if (response && response.data) {
+        const { accessToken, user } = response.data;
+        setLocalStore("accessToken", accessToken);
+        setLocalStore("user", user);
       }
+
       return response.data;
     } catch (error) {
-      if (error.response) {
-        return rejectWithValue(error.response.data.message || "Server Error");
-      } else {
-        return rejectWithValue("Network Error. Please try again.");
+      return rejectWithValue(error.response.data.message || "Server Error");
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  "logoutuser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await httpPost("users/logoutUser", {}, true);
+
+      if (response) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("accessToken");
       }
+
+      return response;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
     }
   }
 );

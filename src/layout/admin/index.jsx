@@ -2,13 +2,7 @@ import { Button, Layout, Menu } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useState } from "react";
-import {
-  FaHamburger,
-  FaBoxes,
-  FaShoppingBag,
-  FaClipboardCheck,
-  FaBox,
-} from "react-icons/fa";
+import { FaHamburger, FaShoppingBag, FaClipboardCheck } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 const menuItems = [
@@ -18,7 +12,7 @@ const menuItems = [
     label: <NavLink to="/admin">Dashboard</NavLink>,
   },
   {
-    key: "sub1",
+    key: "accounts",
     icon: <FaClipboardCheck />,
     label: "Accounts",
     children: [
@@ -35,31 +29,21 @@ const menuItems = [
   {
     key: "products",
     icon: <FaShoppingBag />,
-    label: <NavLink to="/admin/products">Products</NavLink>,
-  },
-  {
-    key: "sub2",
-    icon: <FaBoxes />,
-    label: "Category",
+    label: "Products",
     children: [
       {
-        key: "categorylist",
-        label: <NavLink to="/admin/category">Category</NavLink>,
+        key: "productlist",
+        label: <NavLink to="/admin/products">Products</NavLink>,
       },
       {
-        key: "createcategoryproducts",
+        key: "createproducts",
         label: (
-          <NavLink to="/admin/category/createcategoryproduct">
-            Create Category Products
+          <NavLink to={"/admin/products/createproducts"}>
+            Create Product
           </NavLink>
         ),
       },
     ],
-  },
-  {
-    key: "collection",
-    icon: <FaBox />,
-    label: <NavLink to="/admin/collection">Collection</NavLink>,
   },
 ];
 

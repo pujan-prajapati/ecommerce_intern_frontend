@@ -1,27 +1,19 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import {
-  Dashboard,
-  Products,
-  Category,
-  Collections,
-  Accounts,
-} from "../pages/admin";
+import { Dashboard, Products, Accounts } from "../pages/admin";
 
 import {
   ProductList,
   ProductCreate,
   ProductEdit,
-  CategoryList,
-  CategoryCreate,
-  CategoryEdit,
-  CategoryTable,
-  CategoryProductCreate,
-  CollectionList,
+  AccountsAdmin,
+  AccountsUser,
+  AdminAccountsEdit,
+  UserAccountsEdit,
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
 import { Contact, Home } from "../pages/home";
 import { RegisterPage, LoginPage } from "../pages/auth";
-import { AccountsAdmin, AccountsUser } from "../components/admin/accounts";
+
 import { AdminPrivateRoute } from "./PrivateRoutes";
 
 export const AppRoutes = () => {
@@ -56,27 +48,14 @@ export const AppRoutes = () => {
           <Route path="accounts" element={<Accounts />}>
             <Route index element={<AccountsAdmin />} />
             <Route path="users" element={<AccountsUser />} />
+            <Route path="users/edit/:id" element={<UserAccountsEdit />} />
+            <Route path="edit/:id" element={<AdminAccountsEdit />} />
           </Route>
 
           <Route path="products" element={<Products />}>
             <Route index element={<ProductList />} />
             <Route path="createproducts" element={<ProductCreate />} />
             <Route path="edit/:id" element={<ProductEdit />} />
-          </Route>
-
-          <Route path="category" element={<Category />}>
-            <Route index element={<CategoryList />} />
-            <Route path="createcategory" element={<CategoryCreate />} />
-            <Route path="edit/:id" element={<CategoryEdit />} />
-            <Route path=":name" element={<CategoryTable />} />
-            <Route
-              path="createcategoryproduct"
-              element={<CategoryProductCreate />}
-            />
-          </Route>
-
-          <Route path="collection" element={<Collections />}>
-            <Route index element={<CollectionList />} />
           </Route>
         </Route>
 

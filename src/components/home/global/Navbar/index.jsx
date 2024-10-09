@@ -3,10 +3,9 @@ import { Wrapper } from "../wrapper";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { Avatar, Button, Dropdown, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  logoutUser,
-  selectAuth,
-} from "../../../../redux/features/auth/auth.slice";
+import { selectAuth } from "../../../../redux/features/auth/auth.slice";
+import { logoutUser } from "../../../../redux/features/auth/auth.service";
+import { notify } from "../../../../helpers";
 
 export const Navbar = () => {
   const { items: user } = useSelector(selectAuth);
@@ -14,6 +13,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    notify("Logged Out Successfully");
   };
 
   const items = [
@@ -48,14 +48,18 @@ export const Navbar = () => {
               <FaShoppingCart />
             </NavLink>
 
-            {user && user.token ? (
+            {user ? (
               <Dropdown
                 menu={{
                   items,
                 }}
                 trigger={["click"]}
               >
-                <Avatar icon={<FaUser />} style={{ cursor: "pointer" }} />
+                <Avatar
+                  src={user.avatar ? user.avatar : null}
+                  icon={!user.avatar && <FaUser />}
+                  style={{ cursor: "pointer" }}
+                />
               </Dropdown>
             ) : (
               <>

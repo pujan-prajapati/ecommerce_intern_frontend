@@ -1,4 +1,4 @@
-import { Alert, Button, Form, Input } from "antd";
+import { Button, Form, Input, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthHeader } from "../AuthHeader";
@@ -15,17 +15,18 @@ export const LoginComponent = () => {
     isError,
     isSuccess,
     errorMsg,
+    registerSuccess,
   } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleFormFinish = (values) => {
+  const handleFormFinish = async (values) => {
     dispatch(loginUser(values));
     form.resetFields();
   };
 
   useEffect(() => {
-    if (isSuccess && user?.token) {
+    if (user && !registerSuccess) {
       toast.success("Login Successful");
       if (user?.role === "admin") {
         navigate("/admin");
@@ -35,12 +36,19 @@ export const LoginComponent = () => {
     } else if (isError) {
       toast.error(errorMsg || "Login Failed");
     }
-  }, [isSuccess, isError, user, errorMsg, navigate]);
+  }, [isSuccess, isError, user, errorMsg, navigate, registerSuccess]);
 
   const handleFormFailed = (errorInfo) => {
     console.log("Error : ", errorInfo);
     toast.error("Fill all fields");
   };
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Spin />
+      </div>
+    );
 
   return (
     <>
