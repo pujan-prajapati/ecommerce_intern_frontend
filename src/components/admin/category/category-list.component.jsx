@@ -1,70 +1,70 @@
 import { Alert, Button, Table } from "antd";
 import { AdminHeader } from "../AdminHeader";
 import { TableActionBtn } from "../common/TableActionBtn";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAccount } from "../../../redux/features/accounts/accounts.slice";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  getAllAdmins,
-  deleteUser,
-  getAllUsers,
-} from "../../../redux/features/accounts/accounts.service";
+  deleteCategory,
+  getAllCategories,
+} from "../../../redux/features/category/category.service";
+import { selectCategory } from "../../../redux/features/category/category.slice";
+import { TableTag } from "../common/TableTag";
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
 
 const columns = [
   {
-    title: "Name",
-    dataIndex: "name",
-    render: (text, record) => <p>{record.firstName + " " + record.lastName}</p>,
+    title: "CATEGORY",
+    dataIndex: "category",
+    render: (text, record) => (
+      <div className="flex gap-3">
+        <img
+          src={record.image}
+          className="w-14 h-14 rounded-md"
+          alt={record.name}
+        />
+        <div>
+          <strong>{record.name}</strong>
+          <p>{record.description}</p>
+        </div>
+      </div>
+    ),
   },
   {
-    title: "Avatar",
-    dataIndex: "avatar",
-    render: (text, record) => (
-      <img
-        src={record.avatar}
-        alt={record.name}
-        className="w-14 h-14 rounded-full object-cover"
+    title: "CATEGORY STATUS",
+    dataIndex: "status",
+    render: (text) => (
+      <TableTag
+        tagTitle={text}
+        tagColor={
+          text === "Published"
+            ? "success"
+            : text === "Scheduled"
+            ? "processing"
+            : "error"
+        }
       />
     ),
   },
   {
-    title: "Email",
-    dataIndex: "email",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-  },
-  {
-    title: "Mobile",
-    dataIndex: "mobile",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-  },
-  {
-    title: "Actions",
+    title: "ACTIONS",
     dataIndex: "actions",
     align: "right",
-    render: (_, record) => (
+    render: (text, record) => (
       <TableActionBtn
+        action={deleteCategory}
         id={record._id}
-        action={deleteUser}
-        afterAction={getAllUsers}
-        to={`/admin/accounts/edit/${record._id}`}
+        afterAction={getAllCategories}
+        to={`/admin/category/edit/${record._id}`}
       />
     ),
   },
 ];
 
-export const AccountsAdmin = () => {
-  const { items, isLoading, isError } = useSelector(selectAccount);
-  const dispatch = useDispatch();
-
+export const CategoryList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const dispatch = useDispatch();
+  const { categories, isLoading, isError } = useSelector(selectCategory);
 
   const rowSelection = {
     selectedRowKeys,
@@ -72,6 +72,10 @@ export const AccountsAdmin = () => {
       setSelectedRowKeys(selectedKeys);
     },
   };
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
   const handleDeleteSelected = () => {
     Swal.fire({
@@ -93,8 +97,8 @@ export const AccountsAdmin = () => {
           },
         });
         for (const id of selectedRowKeys) {
-          await dispatch(deleteUser(id));
-          dispatch(getAllAdmins());
+          await dispatch(deleteCategory(id));
+          dispatch(getAllCategories());
         }
         setSelectedRowKeys([]);
         Swal.fire({
@@ -106,18 +110,12 @@ export const AccountsAdmin = () => {
     });
   };
 
-  useEffect(() => {
-    dispatch(getAllAdmins());
-  }, [dispatch]);
-
-  if (isError) return <Alert type="error" message={isError} />;
-
   return (
     <>
       <AdminHeader
-        page_title="Admin Accounts"
-        base_title="Admin"
-        base_href="/admin/accounts"
+        page_title={"Category List"}
+        base_title={"Category"}
+        base_href={"/admin/category"}
       />
 
       {isError ? (
@@ -136,10 +134,10 @@ export const AccountsAdmin = () => {
           </div>
           <Table
             columns={columns}
-            rowKey="_id"
-            dataSource={items}
-            loading={isLoading}
             rowSelection={rowSelection}
+            dataSource={categories}
+            loading={isLoading}
+            rowKey="_id"
           />
         </>
       )}

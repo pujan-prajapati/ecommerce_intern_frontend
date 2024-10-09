@@ -7,6 +7,8 @@ import {
   UserAccountsEdit,
 } from "./accounts";
 
+import { CategoryList, CategoryCreate, CategoryEdit } from "./category";
+
 export {
   ProductList,
   ProductCreate,
@@ -15,4 +17,7 @@ export {
   AccountsUser,
   AdminAccountsEdit,
   UserAccountsEdit,
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
 };

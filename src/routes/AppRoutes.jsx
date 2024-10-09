@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Dashboard, Products, Accounts } from "../pages/admin";
+import { Dashboard, Products, Accounts, Category } from "../pages/admin";
 
 import {
   ProductList,
@@ -9,6 +9,9 @@ import {
   AccountsUser,
   AdminAccountsEdit,
   UserAccountsEdit,
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
 import { Contact, Home } from "../pages/home";
@@ -56,6 +59,12 @@ export const AppRoutes = () => {
             <Route index element={<ProductList />} />
             <Route path="createproducts" element={<ProductCreate />} />
             <Route path="edit/:id" element={<ProductEdit />} />
+          </Route>
+
+          <Route path="category" element={<Category />}>
+            <Route index element={<CategoryList />} />
+            <Route path="createcategory" element={<CategoryCreate />} />
+            <Route path="edit/:id" element={<CategoryEdit />} />
           </Route>
         </Route>
 

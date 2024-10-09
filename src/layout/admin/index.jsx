@@ -2,7 +2,12 @@ import { Button, Layout, Menu } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { useState } from "react";
-import { FaHamburger, FaShoppingBag, FaClipboardCheck } from "react-icons/fa";
+import {
+  FaHamburger,
+  FaShoppingBag,
+  FaClipboardCheck,
+  FaBox,
+} from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 const menuItems = [
@@ -33,13 +38,32 @@ const menuItems = [
     children: [
       {
         key: "productlist",
-        label: <NavLink to="/admin/products">Products</NavLink>,
+        label: <NavLink to="/admin/products">Products List</NavLink>,
       },
       {
         key: "createproducts",
         label: (
           <NavLink to={"/admin/products/createproducts"}>
             Create Product
+          </NavLink>
+        ),
+      },
+    ],
+  },
+  {
+    key: "categoies",
+    icon: <FaBox />,
+    label: "Category",
+    children: [
+      {
+        key: "categorylist",
+        label: <NavLink to="/admin/category">Category List</NavLink>,
+      },
+      {
+        key: "createcategory",
+        label: (
+          <NavLink to={"/admin/category/createcategory"}>
+            Create Category
           </NavLink>
         ),
       },

@@ -90,7 +90,7 @@ export const ProductList = () => {
         });
         for (const id of selectedRowKeys) {
           await dispatch(deleteProduct(id));
-          dispatch(deleteProduct());
+          dispatch(getAllProducts());
         }
         setSelectedRowKeys([]);
         Swal.fire({
