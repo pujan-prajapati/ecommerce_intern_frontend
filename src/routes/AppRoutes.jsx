@@ -12,12 +12,14 @@ import {
   CategoryList,
   CategoryCreate,
   CategoryEdit,
+  CategoryProductList,
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
-import { Contact, Home } from "../pages/home";
+import { Contact, Home, ProductPage } from "../pages/home";
 import { RegisterPage, LoginPage } from "../pages/auth";
 
 import { AdminPrivateRoute } from "./PrivateRoutes";
+import { AboutProduct, HomeProductList } from "../components/home";
 
 export const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -39,6 +41,11 @@ export const AppRoutes = () => {
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Home />} />
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="products" element={<ProductPage />}>
+            <Route index element={<HomeProductList />} />
+            <Route path=":id" element={<AboutProduct />} />
+          </Route>
         </Route>
 
         {/* admin layout */}
@@ -65,6 +72,7 @@ export const AppRoutes = () => {
             <Route index element={<CategoryList />} />
             <Route path="createcategory" element={<CategoryCreate />} />
             <Route path="edit/:id" element={<CategoryEdit />} />
+            <Route path="products/:id" element={<CategoryProductList />} />
           </Route>
         </Route>
 

@@ -1,19 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { handleError, notify } from "../../../helpers";
+import { handleError } from "../../../helpers";
 import { httpDelete, httpGet, httpPost, httpPut } from "../../../axios";
 
 //create product
 export const createProduct = createAsyncThunk(
   "createProduct",
-  async (productData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      for (const key in productData) {
-        formData.append(key, productData[key]);
-      }
       const response = await httpPost("products", formData, true);
-
-      notify("Product created successfully");
 
       return response.data;
     } catch (error) {
@@ -35,19 +29,6 @@ export const getAllProducts = createAsyncThunk(
   }
 );
 
-//get product by id
-export const getProductById = createAsyncThunk(
-  "getProductById",
-  async (productID, { rejectWithValue }) => {
-    try {
-      const response = await httpGet(`products/${productID}`);
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
 //delete product
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
@@ -61,17 +42,38 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-//update product
+//get products by id
+export const getProductById = createAsyncThunk(
+  "getProductById",
+  async (productID, { rejectWithValue }) => {
+    try {
+      const response = await httpGet(`/products/${productID}`);
+      return response.data[0];
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+//update products
 export const updateProduct = createAsyncThunk(
   "updateProduct",
-  async ({ productID, productData }, { rejectWithValue }) => {
+  async ({ productID, formData }, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      for (const key in productData) {
-        formData.append(key, productData[key]);
-      }
+      const response = await httpPut(`/products/${productID}`, formData, true);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
 
-      const response = await httpPut(`products/${productID}`, formData, true);
+//get products by id
+export const getProductsByCategory = createAsyncThunk(
+  "getProductByCategory",
+  async (categoryID, { rejectWithValue }) => {
+    try {
+      const response = await httpGet(`/products/category/${categoryID}`);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);

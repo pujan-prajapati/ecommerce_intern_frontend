@@ -7,7 +7,12 @@ import {
   UserAccountsEdit,
 } from "./accounts";
 
-import { CategoryList, CategoryCreate, CategoryEdit } from "./category";
+import {
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
+  CategoryProductList,
+} from "./category";
 
 export {
   ProductList,
@@ -20,4 +25,5 @@ export {
   CategoryList,
   CategoryCreate,
   CategoryEdit,
+  CategoryProductList,
 };

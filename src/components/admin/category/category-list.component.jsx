@@ -11,6 +11,7 @@ import { selectCategory } from "../../../redux/features/category/category.slice"
 import { TableTag } from "../common/TableTag";
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
@@ -44,6 +45,18 @@ const columns = [
             : "error"
         }
       />
+    ),
+  },
+  {
+    title: "PRODUCTS",
+    dataIndex: "products",
+    render: (text, record) => (
+      <Link
+        to={`/admin/category/products/${record._id}`}
+        className="text-blue-500"
+      >
+        View products
+      </Link>
     ),
   },
   {

@@ -1,13 +1,13 @@
-import { CarouselComponent, HomeHeader, Wrapper } from "../../components/home";
+import { CarouselComponent } from "../../components/home";
 import { Categories } from "../../components/home/homeComponent/Category.component";
-import { Sales } from "../../components/home/homeComponent/sale.component";
+import { Products } from "../../components/home/homeComponent/Products.component";
 
 export const Home = () => {
   return (
     <>
       <CarouselComponent />
 
-      <Sales />
+      <Products />
 
       <Categories />
     </>

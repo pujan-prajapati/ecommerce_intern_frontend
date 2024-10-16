@@ -1,16 +1,18 @@
-import { Alert, Button, Table } from "antd";
+import { useParams } from "react-router-dom";
 import { AdminHeader } from "../AdminHeader";
-import { TableActionBtn } from "../common/TableActionBtn";
+import { Alert, Button, Table } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TableTag } from "../common/TableTag";
-import Swal from "sweetalert2";
-import { FaTrash } from "react-icons/fa";
+import { selectProduct } from "../../../redux/features/products/product.slice";
 import {
   deleteProduct,
   getAllProducts,
+  getProductsByCategory,
 } from "../../../redux/features/products/product.service";
-import { selectProduct } from "../../../redux/features/products/product.slice";
+import { TableTag } from "../common/TableTag";
+import { TableActionBtn } from "../common/TableActionBtn";
+import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa";
 
 const columns = [
   {
@@ -61,10 +63,11 @@ const columns = [
   },
 ];
 
-export const ProductList = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+export const CategoryProductList = () => {
+  const { id } = useParams();
+  const { products, isError, isLoading } = useSelector(selectProduct);
   const dispatch = useDispatch();
-  const { products, isLoading, isError } = useSelector(selectProduct);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const rowSelection = {
     selectedRowKeys,
@@ -72,10 +75,6 @@ export const ProductList = () => {
       setSelectedRowKeys(selectedKeys);
     },
   };
-
-  useEffect(() => {
-    dispatch(getAllProducts());
-  }, [dispatch]);
 
   const handleDeleteSelected = () => {
     Swal.fire({
@@ -110,12 +109,16 @@ export const ProductList = () => {
     });
   };
 
+  useEffect(() => {
+    dispatch(getProductsByCategory(id));
+  }, [dispatch, id]);
+
   return (
     <>
       <AdminHeader
-        page_title={"Product List"}
-        base_title={"Product"}
-        base_href={"/admin/products"}
+        base_href={"/admin/category"}
+        base_title={"Categories"}
+        page_title={`Category: ${products[0]?.category?.name}`}
       />
 
       {isError ? (
