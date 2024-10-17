@@ -80,3 +80,17 @@ export const getProductsByCategory = createAsyncThunk(
     }
   }
 );
+
+//get latest 6 products
+export const getLatestProducts = createAsyncThunk(
+  "getLatestProducts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await httpGet("/products/getlatestproducts");
+
+      return response.data;
+    } catch (error) {
+      handleError(error, rejectWithValue);
+    }
+  }
+);

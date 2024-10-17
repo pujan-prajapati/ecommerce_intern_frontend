@@ -21,12 +21,16 @@ const columns = [
       <div className="flex gap-3">
         <img
           src={record.image}
-          className="w-14 h-14 rounded-md"
+          className="w-14 h-14 object-contain rounded-md"
           alt={record.name}
         />
         <div>
           <strong>{record.name}</strong>
-          <p>{record.description}</p>
+          <p>
+            {record.description.length > 100
+              ? record.description.slice(0, 100) + "..."
+              : record.description}
+          </p>
         </div>
       </div>
     ),

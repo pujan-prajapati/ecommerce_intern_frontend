@@ -3,6 +3,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
+  getLatestProducts,
   getProductById,
   getProductsByCategory,
   updateProduct,
@@ -141,6 +142,26 @@ export const productSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(getProductsByCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.errorMsg = action.error.message;
+      });
+
+    // get latest 6 products
+    builder
+      .addCase(getLatestProducts.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(getLatestProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.products = action.payload;
+      })
+      .addCase(getLatestProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

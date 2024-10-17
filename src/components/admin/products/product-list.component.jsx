@@ -20,12 +20,16 @@ const columns = [
       <div className="flex gap-3">
         <img
           src={record.image}
-          className="w-14 h-14 rounded-md"
+          className="w-14 h-14 object-contain rounded-md"
           alt={record.name}
         />
         <div>
           <strong>{record.name}</strong>
-          <p>{record.description}</p>
+          <p>
+            {record.description.length > 100
+              ? `${record.description.slice(0, 100)}...`
+              : record.description}
+          </p>
         </div>
       </div>
     ),
@@ -33,6 +37,7 @@ const columns = [
   {
     title: "PRODUCT STATUS",
     dataIndex: "status",
+    width: 200,
     render: (text) => (
       <TableTag
         tagTitle={text}
@@ -43,6 +48,7 @@ const columns = [
   {
     title: "PRODUCT CATEGORY",
     dataIndex: "category",
+    width: 200,
     render: (text, record) => <p>{record.category.name}</p>,
   },
 
@@ -50,6 +56,7 @@ const columns = [
     title: "ACTIONS",
     dataIndex: "actions",
     align: "right",
+    width: 200,
     render: (text, record) => (
       <TableActionBtn
         action={deleteProduct}
@@ -138,6 +145,7 @@ export const ProductList = () => {
             dataSource={products}
             loading={isLoading}
             rowKey="_id"
+            pagination={{ pageSize: 10 }}
           />
         </>
       )}

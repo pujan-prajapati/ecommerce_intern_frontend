@@ -20,12 +20,14 @@ export const Categories = () => {
         <HomeHeader title="Categories" />
         <section className="grid grid-cols-3 md:grid-cols-6 gap-3">
           {categories.map((category) => (
-            <Link key={category._id} to={`/${category._id}`}>
-              <div className="p-3 bg-gray-200">
-                <img src={category.image} alt={category.name} />
-                <p className="text-center font-bold text-xl mt-2">
-                  {category.name}
-                </p>
+            <Link key={category._id} to={`/category/${category._id}`}>
+              <div className="h-64 bg-gray-100 hover:shadow-lg transition-all duration-300">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-52 object-contain bg-gray-50"
+                />
+                <p className="text-center  text-xl mt-2">{category.name}</p>
               </div>
             </Link>
           ))}

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { HomeHeader, Wrapper } from "../global";
-import { getAllProducts } from "../../../redux/features/products/product.service";
+import { getLatestProducts } from "../../../redux/features/products/product.service";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,7 @@ export const Products = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProducts());
+    dispatch(getLatestProducts());
   }, [dispatch]);
 
   return (
@@ -18,19 +18,22 @@ export const Products = () => {
       <Wrapper>
         <HomeHeader title={"Products"} />
 
-        <section className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
           {products.map((product) => (
             <Link key={product._id} to={`/products/${product._id}`}>
-              <div className="p-3 bg-gray-200">
+              <div className=" h-[320px]  bg-gray-100 hover:shadow-lg transition-all duration-300">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="h-52 w-full object-cover"
+                  className="h-52 w-full bg-gray-50 object-contain"
                 />
-                <div>
-                  <p className="text-center font-bold text-xl mt-2">
-                    {product.name}
+                <div className="p-3">
+                  <p>
+                    {product.name.length > 50
+                      ? `${product.name.slice(0, 50)}...`
+                      : product.name}
                   </p>
+                  <p className="text-red-500">$ {product.price}</p>
                 </div>
               </div>
             </Link>
