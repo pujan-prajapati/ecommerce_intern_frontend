@@ -1,16 +1,24 @@
-import { Form, Input, Select } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { Wrapper } from "../global";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../../../redux/features/products/product.service";
 import { selectProduct } from "../../../redux/features/products/product.slice";
+import { selectOrder } from "../../../redux/features/orders/order.slice";
+import { notify } from "../../../helpers";
+import { orderItem } from "../../../redux/features/orders/order.service";
 
 export const BuyProduct = () => {
   const [selectEsewa, setSelectEsewa] = useState(false);
   const { id } = useParams();
+  const { state } = useLocation();
   const { product } = useSelector(selectProduct);
   const dispatch = useDispatch();
+  const { isLoading, errorMsg } = useSelector(selectOrder);
+  const navigate = useNavigate();
+
+  const initialQuantity = state?.quantity || 1;
 
   useEffect(() => {
     dispatch(getProductById(id));
@@ -21,7 +29,15 @@ export const BuyProduct = () => {
   };
 
   const handleFinish = (values) => {
-    console.log(values);
+    try {
+      dispatch(
+        orderItem({ ...values, productDetails: id, quantity: initialQuantity })
+      );
+      notify("Order Placed Successfully");
+      navigate(`/products/${id}`);
+    } catch (error) {
+      notify(errorMsg + error, "error");
+    }
   };
 
   return (
@@ -40,6 +56,9 @@ export const BuyProduct = () => {
 
         <Form layout="vertical" onFinish={handleFinish}>
           {/* Delivery */}
+
+          <h1>Quantity : {initialQuantity}</h1>
+
           <h1 className="mb-3 text-2xl font-bold">Delivery</h1>
 
           {/* select country */}
@@ -115,10 +134,10 @@ export const BuyProduct = () => {
             <Input size="large" placeholder="Enter city" />
           </Form.Item>
 
-          {/* phone */}
+          {/* phoneNumber */}
           <Form.Item
             className="w-[500px]"
-            name="phone"
+            name="phoneNumber"
             rules={[
               {
                 required: true,
@@ -133,7 +152,7 @@ export const BuyProduct = () => {
 
           <Form.Item
             className="w-[500px]"
-            name="payment"
+            name="paymentMethod"
             rules={[
               {
                 required: true,
@@ -158,12 +177,14 @@ export const BuyProduct = () => {
           )}
 
           <Form.Item className="w-[500px]">
-            <button
-              type="submit"
-              className="bg-yellow-500 w-full py-2 rounded-md text-xl font-bold text-white mt-2 hover:bg-yellow-600 transition-all ease-in-out duration-300"
+            <Button
+              htmlType="submit"
+              type="primary"
+              className="bg-yellow-500 w-full py-6 rounded-md text-xl font-bold text-white mt-2 hover:!bg-yellow-600 transition-all ease-in-out duration-300"
+              loading={isLoading}
             >
               Complete Order
-            </button>
+            </Button>
           </Form.Item>
         </Form>
       </Wrapper>

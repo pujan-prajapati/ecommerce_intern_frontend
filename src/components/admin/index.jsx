@@ -14,6 +14,8 @@ import {
   CategoryProductList,
 } from "./category";
 
+import { OrderList, OrderStatusEdit } from "./orders";
+
 export {
   ProductList,
   ProductCreate,
@@ -26,4 +28,6 @@ export {
   CategoryCreate,
   CategoryEdit,
   CategoryProductList,
+  OrderList,
+  OrderStatusEdit,
 };

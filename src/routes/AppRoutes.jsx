@@ -1,5 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { Dashboard, Products, Accounts, Category } from "../pages/admin";
+import {
+  Dashboard,
+  Products,
+  Accounts,
+  Category,
+  Orders,
+} from "../pages/admin";
 
 import {
   ProductList,
@@ -13,18 +19,21 @@ import {
   CategoryCreate,
   CategoryEdit,
   CategoryProductList,
+  OrderList,
+  OrderStatusEdit,
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
 import {
-  CartPage,
   CategoryPage,
   Contact,
   Home,
+  OrderDetails,
+  OrderPage,
   ProductPage,
 } from "../pages/home";
 import { RegisterPage, LoginPage } from "../pages/auth";
 
-import { AdminPrivateRoute } from "./PrivateRoutes";
+import { AdminPrivateRoute, PrivateRoute } from "./PrivateRoutes";
 import { AboutProduct, BuyProduct, CategoryProducts } from "../components/home";
 
 export const AppRoutes = () => {
@@ -48,16 +57,20 @@ export const AppRoutes = () => {
           <Route index element={<Home />} />
           <Route path="/contact" element={<Contact />} />
 
-          <Route path="/cart" element={<CartPage />} />
-
           <Route path="products" element={<ProductPage />}>
             <Route path=":id" element={<AboutProduct />} />
-            <Route path=":id/buynow" element={<BuyProduct />} />
+            <Route
+              path=":id/buynow"
+              element={<PrivateRoute component={<BuyProduct />} />}
+            />
           </Route>
 
           <Route path="category" element={<CategoryPage />}>
             <Route path=":id" element={<CategoryProducts />} />
           </Route>
+
+          <Route path="/orders" element={<OrderPage />} />
+          <Route path="/orders/getorder/:id" element={<OrderDetails />} />
         </Route>
 
         {/* admin layout */}
@@ -85,6 +98,11 @@ export const AppRoutes = () => {
             <Route path="createcategory" element={<CategoryCreate />} />
             <Route path="edit/:id" element={<CategoryEdit />} />
             <Route path="products/:id" element={<CategoryProductList />} />
+          </Route>
+
+          <Route path="orders" element={<Orders />}>
+            <Route index element={<OrderList />} />
+            <Route path="edit/:id" element={<OrderStatusEdit />} />
           </Route>
         </Route>
 

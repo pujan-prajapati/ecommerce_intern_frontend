@@ -2,6 +2,6 @@ import { Home } from "./home.page";
 import { Contact } from "./contact/contact.page";
 import { ProductPage } from "./products";
 import { CategoryPage } from "./category";
-import { CartPage } from "./cart/cart.page";
+import { OrderPage, OrderDetails } from "./order";
 
-export { Home, Contact, ProductPage, CategoryPage, CartPage };
+export { Home, Contact, ProductPage, CategoryPage, OrderPage, OrderDetails };

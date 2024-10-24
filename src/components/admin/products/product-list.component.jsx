@@ -35,13 +35,19 @@ const columns = [
     ),
   },
   {
+    title: "QUANTITY",
+    dataIndex: "quantity",
+    width: 200,
+    render: (text) => <strong>{text}</strong>,
+  },
+  {
     title: "PRODUCT STATUS",
     dataIndex: "status",
     width: 200,
-    render: (text) => (
+    render: (text, record) => (
       <TableTag
-        tagTitle={text}
-        tagColor={text === "in_stock" ? "success" : "error"}
+        tagTitle={record.quantity > 0 ? "in_stock" : "out_of_stock"}
+        tagColor={record.quantity > 0 ? "success" : "error"}
       />
     ),
   },

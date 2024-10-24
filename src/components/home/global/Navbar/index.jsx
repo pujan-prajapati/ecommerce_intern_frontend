@@ -7,13 +7,16 @@ import { selectAuth } from "../../../../redux/features/auth/auth.slice";
 import { logoutUser } from "../../../../redux/features/auth/auth.service";
 import { notify } from "../../../../helpers";
 import { useState } from "react";
+import { CartList } from "../../CartComponent/CartList.component";
+import { getCart } from "../../../../redux/features/cart/cart.service";
 
 export const Navbar = () => {
   const { items: user } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
-  const showDrawer = () => {
+  const showDrawer = async () => {
+    await dispatch(getCart());
     setOpen(true);
   };
   const onClose = () => {
@@ -50,6 +53,7 @@ export const Navbar = () => {
               Search
             </Button>
           </div>
+
           <div className="flex gap-5 items-center">
             <NavLink to={"/"}>Home</NavLink>
             <NavLink to={"/contact"}>Contact</NavLink>
@@ -57,7 +61,7 @@ export const Navbar = () => {
               <FaShoppingCart />
             </Button>
             <Drawer onClose={onClose} width={500} title="Cart" open={open}>
-              <p>Content</p>
+              <CartList />
             </Drawer>
 
             {user ? (

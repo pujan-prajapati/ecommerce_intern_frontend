@@ -5,10 +5,14 @@ import { selectProduct } from "../../../redux/features/products/product.slice";
 import { useEffect, useState } from "react";
 import { getProductById } from "../../../redux/features/products/product.service";
 import { Button, InputNumber } from "antd";
+import { addToCart } from "../../../redux/features/cart/cart.service";
+import { notify } from "../../../helpers";
+import { selectCart } from "../../../redux/features/cart/cart.slice";
 
 export const AboutProduct = () => {
   const { id } = useParams();
   const { product } = useSelector(selectProduct);
+  const { isLoading } = useSelector(selectCart);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
@@ -16,15 +20,18 @@ export const AboutProduct = () => {
     dispatch(getProductById(id));
   }, [dispatch, id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const cartItem = {
-      name: product?.name,
-      price: product?.price,
-      image: product?.image,
-      quantity: quantity,
+      productId: product?._id,
+      quantity,
     };
+    try {
+      await dispatch(addToCart(cartItem));
 
-    console.log("cartItem : ", cartItem);
+      notify("Item added to cart");
+    } catch (error) {
+      notify(error, "error");
+    }
   };
 
   return (
@@ -64,11 +71,12 @@ export const AboutProduct = () => {
                 className="mb-5 text-lg w-96 py-5 rounded-full bg-gray-400 hover:!bg-gray-500"
                 type="primary"
                 onClick={handleAddToCart}
+                loading={isLoading}
               >
                 Add to Cart
               </Button>
 
-              <Link to={`/products/${id}/buynow`}>
+              <Link to={`/products/${id}/buynow`} state={{ quantity }}>
                 <Button
                   className="text-lg w-96 py-5 rounded-full"
                   type="primary"
