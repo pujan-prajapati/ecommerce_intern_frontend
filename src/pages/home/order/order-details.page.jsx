@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Wrapper } from "../../../components/home";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOrder } from "../../../redux/features/orders/order.slice";
@@ -7,13 +7,14 @@ import {
   cancelOrder,
   getOrderById,
 } from "../../../redux/features/orders/order.service";
-import { Button, Spin, Tag } from "antd";
+import { Alert, Button, Spin, Tag } from "antd";
 import { notify } from "../../../helpers";
 
 export const OrderDetails = () => {
   const { id } = useParams();
   const { order, isLoading } = useSelector(selectOrder);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getOrderById(id));
@@ -24,6 +25,7 @@ export const OrderDetails = () => {
       await dispatch(cancelOrder({ orderID: id }));
       notify("Order Cancelled Successfully");
       dispatch(getOrderById(id));
+      navigate("/orders");
     } catch (error) {
       notify(error, "error");
     }
@@ -79,9 +81,26 @@ export const OrderDetails = () => {
               </div>
 
               <p>Name : {order.firstName + " " + order.lastName}</p>
-              <Button type="primary" danger onClick={handleCancelOrder}>
-                Cancel Order
-              </Button>
+
+              {order.status === "shipped" ? (
+                <Alert message="Product already shipped. So cant cancel now" />
+              ) : order.status === "delivered" ? (
+                <div>
+                  <Alert
+                    message="Product delivered successfully"
+                    type="success"
+                  />
+                  <Button className="mt-4" type="primary" danger>
+                    Return Product
+                  </Button>
+                </div>
+              ) : order.status === "cancelled" ? (
+                <Alert message="Product Cancelled" type="error" />
+              ) : (
+                <Button type="primary" danger onClick={handleCancelOrder}>
+                  Cancel Order
+                </Button>
+              )}
             </div>
           </div>
         )}

@@ -78,9 +78,22 @@ export const cancelOrder = createAsyncThunk(
     try {
       const response = await httpPut(
         `/orders/cancelOrder/${orderID}`,
-        null,
+        {},
         true
       );
+      return response.data;
+    } catch (error) {
+      handleError(error, rejectWithValue);
+    }
+  }
+);
+
+//get user orders
+export const getUserOrders = createAsyncThunk(
+  "getUserOrders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await httpGet(`/orders/getuserorders`, null, true);
       return response.data;
     } catch (error) {
       handleError(error, rejectWithValue);

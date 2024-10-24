@@ -6,6 +6,7 @@ import {
   getOrderById,
   cancelOrder,
   deleteOrder,
+  getUserOrders,
 } from "./order.service";
 
 const initialState = {
@@ -149,6 +150,26 @@ export const orderSlice = createSlice({
         );
       })
       .addCase(deleteOrder.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.errorMsg = action.payload;
+      });
+
+    //get user orders
+    builder
+      .addCase(getUserOrders.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.orders = action.payload;
+      })
+      .addCase(getUserOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
