@@ -85,15 +85,10 @@ export const OrderDetails = () => {
               {order.status === "shipped" ? (
                 <Alert message="Product already shipped. So cant cancel now" />
               ) : order.status === "delivered" ? (
-                <div>
-                  <Alert
-                    message="Product delivered successfully"
-                    type="success"
-                  />
-                  <Button className="mt-4" type="primary" danger>
-                    Return Product
-                  </Button>
-                </div>
+                <Alert
+                  message="Product delivered successfully"
+                  type="success"
+                />
               ) : order.status === "cancelled" ? (
                 <Alert message="Product Cancelled" type="error" />
               ) : (

@@ -35,8 +35,8 @@ export const CategoryEdit = () => {
   return (
     <>
       <AdminHeader
-        base_href="/admin/categories"
-        base_title="Categories"
+        base_href="/admin/category"
+        base_title="Category"
         page_title="Edit Category"
       />
 

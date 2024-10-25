@@ -1,17 +1,25 @@
-import { Button, Form, Select } from "antd";
+import { Button, Form, Select, Spin } from "antd";
 import { AdminHeader } from "../AdminHeader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllOrders,
+  getOrderById,
   updateOrderStatus,
 } from "../../../redux/features/orders/order.service";
 import { notify } from "../../../helpers";
+import { selectOrder } from "../../../redux/features/orders/order.slice";
+import { useEffect } from "react";
 
 export const OrderStatusEdit = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { isLoading, order } = useSelector(selectOrder);
+
+  useEffect(() => {
+    dispatch(getOrderById(id));
+  }, [dispatch, id]);
 
   const onFinish = async (values) => {
     try {
@@ -24,6 +32,10 @@ export const OrderStatusEdit = () => {
     }
   };
 
+  if (isLoading) return <Spin fullscreen />;
+
+  console.log(order?.status);
+
   return (
     <>
       <AdminHeader
@@ -32,7 +44,12 @@ export const OrderStatusEdit = () => {
         page_title={"Order Status Edit"}
       />
 
-      <Form onFinish={onFinish} labelCol={{ span: 4 }} labelAlign="left">
+      <Form
+        onFinish={onFinish}
+        labelCol={{ span: 4 }}
+        labelAlign="left"
+        initialValues={{ status: order?.status }}
+      >
         <Form.Item label="Status" name={"status"}>
           <Select
             placeholder="Select Status"

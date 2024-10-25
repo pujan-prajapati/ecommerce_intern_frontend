@@ -187,6 +187,7 @@ export const OrderList = () => {
         dataSource={orders}
         loading={isLoading}
         rowKey={"_id"}
+        scroll={{ x: "max-content" }}
         rowSelection={rowSelection}
       />
     </>
