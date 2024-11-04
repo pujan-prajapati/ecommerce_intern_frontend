@@ -30,6 +30,7 @@ import {
   OrderDetails,
   OrderPage,
   ProductPage,
+  WishList,
 } from "../pages/home";
 import { RegisterPage, LoginPage } from "../pages/auth";
 
@@ -71,6 +72,8 @@ export const AppRoutes = () => {
 
           <Route path="/orders" element={<OrderPage />} />
           <Route path="/orders/getorder/:id" element={<OrderDetails />} />
+
+          <Route path="/wishlist" element={<WishList />} />
         </Route>
 
         {/* admin layout */}
