@@ -1,17 +1,49 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { selectProduct } from "../../../redux/features/products/product.slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProductsByCategory } from "../../../redux/features/products/product.service";
+import { getLocalStore, notify } from "../../../helpers";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../../redux/features/wishlist/wishlist.service";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 export const CategoryProducts = () => {
   const { id } = useParams();
   const { products } = useSelector(selectProduct);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [like, setLike] = useState({});
 
   useEffect(() => {
     dispatch(getProductsByCategory(id));
   }, [dispatch, id]);
+
+  const handleLike = (id) => {
+    const token = getLocalStore("accessToken");
+    if (token) {
+      try {
+        if (like[id]) {
+          dispatch(removeFromWishlist(id));
+          notify("Item removed from wishlist");
+        } else {
+          dispatch(addToWishlist(id));
+          notify("Item added to wishlist");
+        }
+        setLike((prev) => ({
+          ...prev,
+          [id]: !prev[id],
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <>
@@ -24,8 +56,11 @@ export const CategoryProducts = () => {
         </div>
         <div className=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-fit gap-4">
           {products.map((product) => (
-            <Link key={product._id} to={`/products/${product._id}`}>
-              <div className="mb-3 h-[370px] bg-gray-100 hover:shadow-md transition-all duration-300">
+            <div
+              className="mb-3 h-[400px] bg-gray-100 hover:shadow-md transition-all duration-300 relative"
+              key={product._id}
+            >
+              <Link to={`/products/${product._id}`}>
                 <div className="h-[230px]">
                   <img
                     src={product.image}
@@ -33,17 +68,28 @@ export const CategoryProducts = () => {
                     className="h-full bg-white w-full object-contain"
                   />
                 </div>
-                <div className="font-semibold p-2">
-                  <h1>{product.name}</h1>
-                  <p className="text-red-500">$ {product.price}</p>
-                  <p className="font-normal">
-                    {product.description.length > 50
-                      ? product.description.slice(0, 50) + "..."
-                      : product.description}
-                  </p>
-                </div>
+              </Link>
+
+              <div className="font-semibold p-2">
+                <h1>{product.name}</h1>
+                <p className="text-red-500">$ {product.price}</p>
+                <p className="font-normal">
+                  {product.description.length > 50
+                    ? product.description.slice(0, 50) + "..."
+                    : product.description}
+                </p>
               </div>
-            </Link>
+              <div
+                className="absolute bottom-4 right-4 cursor-pointer"
+                onClick={() => handleLike(product._id)}
+              >
+                {like[product._id] ? (
+                  <FaHeart className="w-6 h-6 text-red-500" />
+                ) : (
+                  <FaRegHeart className="w-6 h-6" />
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </section>

@@ -34,8 +34,6 @@ export const OrderStatusEdit = () => {
 
   if (isLoading) return <Spin fullscreen />;
 
-  console.log(order?.status);
-
   return (
     <>
       <AdminHeader

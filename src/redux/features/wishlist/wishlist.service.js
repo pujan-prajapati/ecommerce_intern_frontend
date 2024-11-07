@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { httpPost } from "../../../axios";
+import { httpDelete, httpGet, httpPost } from "../../../axios";
 
 export const addToWishlist = createAsyncThunk(
   "addToWishlist",
@@ -17,7 +17,7 @@ export const getAllWishlist = createAsyncThunk(
   "getAllWishlist",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await httpPost("/wishlist", null, true);
+      const response = await httpGet("/wishlist", null, true);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -29,7 +29,7 @@ export const removeFromWishlist = createAsyncThunk(
   "removeFromWishlist",
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await httpPost(`/wishlist/${productId}`, {}, true);
+      const response = await httpDelete(`/wishlist/${productId}`, {}, true);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
