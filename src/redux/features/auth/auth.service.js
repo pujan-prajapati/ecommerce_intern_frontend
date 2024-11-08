@@ -23,6 +23,7 @@ export const loginUser = createAsyncThunk(
 
       if (response && response.data) {
         const { accessToken, user } = response.data;
+
         setLocalStore("accessToken", accessToken);
         setLocalStore("user", user);
       }

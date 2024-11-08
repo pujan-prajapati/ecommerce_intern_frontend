@@ -83,9 +83,11 @@ export const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.isSuccess = true;
-        state.items = null;
         state.isError = false;
+        state.isSuccess = false;
+        state.registerSuccess = false;
+        state.errorMsg = "";
+        state.items = null;
       });
   },
 });

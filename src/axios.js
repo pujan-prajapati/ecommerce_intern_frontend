@@ -80,9 +80,6 @@ export const httpPut = async (url, data, is_strict = false) => {
 export const httpGet = async (url, params = null, is_strict = false) => {
   let headers = getHeaders(is_strict);
 
-  if (params) {
-    headers["params"] = params;
-  }
-  const response = await http.get(url, { headers: headers });
+  const response = await http.get(url, { headers: headers, params: params });
   return response.data;
 };

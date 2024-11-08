@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { useEffect, useState } from "react";
 import { getProductsByCategory } from "../../../redux/features/products/product.service";
-import { getLocalStore, notify } from "../../../helpers";
+import { getLocalStore, notify, setLocalStore } from "../../../helpers";
 import {
   addToWishlist,
   removeFromWishlist,
@@ -16,7 +16,8 @@ export const CategoryProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [like, setLike] = useState({});
+  const user = getLocalStore("user");
+  const [wishlist, setWishlist] = useState(user ? user.wishlist : []);
 
   useEffect(() => {
     dispatch(getProductsByCategory(id));
@@ -25,21 +26,20 @@ export const CategoryProducts = () => {
   const handleLike = (id) => {
     const token = getLocalStore("accessToken");
     if (token) {
-      try {
-        if (like[id]) {
-          dispatch(removeFromWishlist(id));
-          notify("Item removed from wishlist");
-        } else {
-          dispatch(addToWishlist(id));
-          notify("Item added to wishlist");
-        }
-        setLike((prev) => ({
-          ...prev,
-          [id]: !prev[id],
-        }));
-      } catch (error) {
-        console.log(error);
+      let updatedWishlist;
+      if (wishlist.includes(id)) {
+        updatedWishlist = wishlist.filter((item) => item !== id);
+        dispatch(removeFromWishlist(id));
+        notify("Item removed from wishlist");
+      } else {
+        updatedWishlist = [...wishlist, id];
+        dispatch(addToWishlist(id));
+        notify("Item added to wishlist");
       }
+
+      setWishlist(updatedWishlist);
+      const updatedUser = { ...user, wishlist: updatedWishlist };
+      setLocalStore("user", updatedUser);
     } else {
       navigate("/login");
     }
@@ -83,7 +83,7 @@ export const CategoryProducts = () => {
                 className="absolute bottom-4 right-4 cursor-pointer"
                 onClick={() => handleLike(product._id)}
               >
-                {like[product._id] ? (
+                {wishlist.includes(product._id) ? (
                   <FaHeart className="w-6 h-6 text-red-500" />
                 ) : (
                   <FaRegHeart className="w-6 h-6" />

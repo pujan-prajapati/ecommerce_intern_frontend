@@ -9,37 +9,36 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/features/wishlist/wishlist.service";
-import { getLocalStore, notify } from "../../../helpers";
+import { getLocalStore, notify, setLocalStore } from "../../../helpers";
 
 export const Products = () => {
   const { products } = useSelector(selectProduct);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [like, setLike] = useState({});
+  const user = getLocalStore("user");
+  const [wishlist, setWishlist] = useState(user ? user.wishlist : []);
 
   useEffect(() => {
     dispatch(getLatestProducts());
   }, [dispatch]);
 
   const handleLike = (id) => {
-    const token = getLocalStore("accessToken");
-    if (token) {
-      try {
-        if (like[id]) {
-          dispatch(removeFromWishlist(id));
-          notify("Item removed from wishlist");
-        } else {
-          dispatch(addToWishlist(id));
-          notify("Item added to wishlist");
-        }
-        setLike((prev) => ({
-          ...prev,
-          [id]: !prev[id],
-        }));
-      } catch (error) {
-        console.log(error);
+    if (user) {
+      let updatedWishlist;
+      if (wishlist.includes(id)) {
+        updatedWishlist = wishlist.filter((item) => item !== id);
+        dispatch(removeFromWishlist(id));
+        notify("Item removed from wishlist");
+      } else {
+        updatedWishlist = [...wishlist, id];
+        dispatch(addToWishlist(id));
+        notify("Item added to wishlist");
       }
+
+      setWishlist(updatedWishlist);
+      const updatedUser = { ...user, wishlist: updatedWishlist };
+      setLocalStore("user", updatedUser);
     } else {
       navigate("/login");
     }
@@ -74,7 +73,7 @@ export const Products = () => {
                   className="absolute bottom-4 right-4 cursor-pointer"
                   onClick={() => handleLike(product._id)}
                 >
-                  {like[product._id] ? (
+                  {wishlist.includes(product._id) ? (
                     <FaHeart className="w-6 h-6 text-red-500" />
                   ) : (
                     <FaRegHeart className="w-6 h-6" />

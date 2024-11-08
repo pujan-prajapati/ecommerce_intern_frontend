@@ -10,8 +10,9 @@ import { Button, Table } from "antd";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getLocalStore, setLocalStore } from "../../../helpers";
 
-const columns = (dispatch) => [
+const columns = (dispatch, wishlist, setWishlist) => [
   {
     title: "Image",
     dataIndex: "image",
@@ -48,6 +49,15 @@ const columns = (dispatch) => [
           onClick={() =>
             dispatch(removeFromWishlist(record._id)).then(() => {
               dispatch(getAllWishlist());
+              const updatedWishlist = wishlist.filter(
+                (item) => item !== record._id
+              );
+              setWishlist(updatedWishlist);
+              const updatedUser = {
+                ...getLocalStore("user"),
+                wishlist: updatedWishlist,
+              };
+              setLocalStore("user", updatedUser);
             })
           }
         />
@@ -63,6 +73,9 @@ export const WishList = () => {
   const { items } = useSelector(selectWishlist);
   const dispatch = useDispatch();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [wishlist, setWishlist] = useState(
+    getLocalStore("user")?.wishlist || []
+  );
 
   const rowSelection = {
     selectedRowKeys,
@@ -96,6 +109,14 @@ export const WishList = () => {
         });
         for (const id of selectedRowKeys) {
           await dispatch(removeFromWishlist(id));
+          const updatedWishlist = wishlist.filter((item) => item !== id);
+          setWishlist(updatedWishlist); // Update state
+          // Update localStorage with the new wishlist
+          const updatedUser = {
+            ...getLocalStore("user"),
+            wishlist: updatedWishlist,
+          };
+          setLocalStore("user", updatedUser);
           dispatch(getAllWishlist());
         }
         setSelectedRowKeys([]);
@@ -125,7 +146,7 @@ export const WishList = () => {
         </div>
         {items.length > 0 ? (
           <Table
-            columns={columns(dispatch)}
+            columns={columns(dispatch, wishlist, setWishlist)}
             dataSource={items}
             rowKey={"_id"}
             rowSelection={rowSelection}

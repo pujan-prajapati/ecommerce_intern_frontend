@@ -91,10 +91,12 @@ export const cancelOrder = createAsyncThunk(
 //get user orders
 export const getUserOrders = createAsyncThunk(
   "getUserOrders",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      const response = await httpGet(`/orders/getuserorders`, null, true);
-      return response.data;
+      const params = { page, limit };
+      const response = await httpGet(`/orders/getuserorders`, params, true);
+      const { orders, totalPages, currentPage, totalCount } = response.data;
+      return { orders, totalPages, currentPage, totalCount };
     } catch (error) {
       handleError(error, rejectWithValue);
     }
