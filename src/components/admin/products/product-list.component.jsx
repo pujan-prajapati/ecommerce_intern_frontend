@@ -77,7 +77,8 @@ const columns = [
 export const ProductList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const dispatch = useDispatch();
-  const { products, isLoading, isError } = useSelector(selectProduct);
+  const { products, isLoading, isError, currentPage, totalProducts } =
+    useSelector(selectProduct);
 
   const rowSelection = {
     selectedRowKeys,
@@ -87,8 +88,10 @@ export const ProductList = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllProducts());
-  }, [dispatch]);
+    dispatch(getAllProducts({ page: currentPage, limit: 10 }));
+  }, [dispatch, currentPage]);
+
+  console.log(products);
 
   const handleDeleteSelected = () => {
     Swal.fire({
@@ -151,7 +154,14 @@ export const ProductList = () => {
             dataSource={products}
             loading={isLoading}
             rowKey="_id"
-            pagination={{ pageSize: 10 }}
+            pagination={{
+              pageSize: 10,
+              current: currentPage,
+              total: totalProducts,
+              onChange: (page) => {
+                dispatch(getAllProducts({ page, limit: 10 }));
+              },
+            }}
           />
         </>
       )}

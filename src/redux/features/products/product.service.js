@@ -19,10 +19,26 @@ export const createProduct = createAsyncThunk(
 //get all products
 export const getAllProducts = createAsyncThunk(
   "getAllProducts",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page = 1, limit = 10, search, sortBy, sortDirection, minPrice, maxPrice },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await httpGet("products");
-      return response.data;
+      const params = {
+        page,
+        limit,
+        search,
+        sortBy,
+        sortDirection,
+        minPrice,
+        maxPrice,
+      };
+      const response = await httpGet("products", params);
+
+      const { products, totalProducts, totalPages, currentPage } =
+        response.data;
+
+      return { products, totalProducts, totalPages, currentPage };
     } catch (error) {
       return handleError(error, rejectWithValue);
     }

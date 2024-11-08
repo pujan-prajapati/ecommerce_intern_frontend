@@ -35,7 +35,12 @@ import {
 import { RegisterPage, LoginPage } from "../pages/auth";
 
 import { AdminPrivateRoute, PrivateRoute } from "./PrivateRoutes";
-import { AboutProduct, BuyProduct, CategoryProducts } from "../components/home";
+import {
+  AboutProduct,
+  BuyProduct,
+  CategoryProducts,
+  SearchProducts,
+} from "../components/home";
 
 export const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -59,6 +64,7 @@ export const AppRoutes = () => {
           <Route path="/contact" element={<Contact />} />
 
           <Route path="products" element={<ProductPage />}>
+            <Route index element={<SearchProducts />} />
             <Route path=":id" element={<AboutProduct />} />
             <Route
               path=":id/buynow"

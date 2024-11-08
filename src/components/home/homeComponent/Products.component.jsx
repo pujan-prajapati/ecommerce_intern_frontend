@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { HomeHeader, Wrapper } from "../global";
 import { getLatestProducts } from "../../../redux/features/products/product.service";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import {
@@ -23,26 +23,30 @@ export const Products = () => {
     dispatch(getLatestProducts());
   }, [dispatch]);
 
-  const handleLike = (id) => {
-    if (user) {
-      let updatedWishlist;
-      if (wishlist.includes(id)) {
-        updatedWishlist = wishlist.filter((item) => item !== id);
-        dispatch(removeFromWishlist(id));
-        notify("Item removed from wishlist");
-      } else {
-        updatedWishlist = [...wishlist, id];
-        dispatch(addToWishlist(id));
-        notify("Item added to wishlist");
-      }
+  const handleLike = useCallback(
+    (id) => {
+      const token = getLocalStore("accessToken");
+      if (token) {
+        let updatedWishlist;
+        if (wishlist.includes(id)) {
+          updatedWishlist = wishlist.filter((item) => item !== id);
+          dispatch(removeFromWishlist(id));
+          notify("Item removed from wishlist");
+        } else {
+          updatedWishlist = [...wishlist, id];
+          dispatch(addToWishlist(id));
+          notify("Item added to wishlist");
+        }
 
-      setWishlist(updatedWishlist);
-      const updatedUser = { ...user, wishlist: updatedWishlist };
-      setLocalStore("user", updatedUser);
-    } else {
-      navigate("/login");
-    }
-  };
+        setWishlist(updatedWishlist);
+        const updatedUser = { ...user, wishlist: updatedWishlist };
+        setLocalStore("user", updatedUser);
+      } else {
+        navigate("/login");
+      }
+    },
+    [dispatch, wishlist, user, navigate]
+  );
 
   return (
     <>
@@ -74,9 +78,15 @@ export const Products = () => {
                   onClick={() => handleLike(product._id)}
                 >
                   {wishlist.includes(product._id) ? (
-                    <FaHeart className="w-6 h-6 text-red-500" />
+                    <FaHeart
+                      aria-label="Added to wishlist"
+                      className="w-6 h-6 text-red-500"
+                    />
                   ) : (
-                    <FaRegHeart className="w-6 h-6" />
+                    <FaRegHeart
+                      aria-label="Add to wishlist"
+                      className="w-6 h-6"
+                    />
                   )}
                 </div>
               </div>

@@ -16,6 +16,9 @@ const initialState = {
   isSuccess: false,
   isError: false,
   errorMsg: "",
+  totalProducts: 0,
+  totalPages: 1,
+  currentPage: 1,
 };
 
 export const productSlice = createSlice({
@@ -34,7 +37,10 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.totalProducts = action.payload.totalProducts;
+        state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
         state.isLoading = false;

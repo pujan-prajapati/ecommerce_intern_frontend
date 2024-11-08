@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Wrapper } from "../wrapper";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { Avatar, Button, Drawer, Dropdown, Input } from "antd";
@@ -14,6 +14,8 @@ export const Navbar = () => {
   const { items: user } = useSelector(selectAuth);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
 
   const showDrawer = async () => {
     await dispatch(getCart());
@@ -40,6 +42,12 @@ export const Navbar = () => {
     },
   ];
 
+  const handleSearch = () => {
+    if (searchValue.trim()) {
+      navigate(`/products?search=${searchValue}`);
+    }
+  };
+
   return (
     <>
       <nav className="bg-gray-100">
@@ -48,8 +56,18 @@ export const Navbar = () => {
             LOGO.
           </a>
           <div>
-            <Input className="w-[500px] rounded-r-none" prefix={<FaSearch />} />
-            <Button type="primary" className="rounded-l-none">
+            <Input
+              className="w-[500px] rounded-r-none"
+              prefix={<FaSearch />}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onPressEnter={handleSearch}
+            />
+            <Button
+              type="primary"
+              className="rounded-l-none"
+              onClick={handleSearch}
+            >
               Search
             </Button>
           </div>

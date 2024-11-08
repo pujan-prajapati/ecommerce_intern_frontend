@@ -83,7 +83,7 @@ export const categorySlice = createSlice({
         state.errorMsg = action.payload;
       });
 
-    //delete category
+    //get category by id
     builder
       .addCase(getCategoryById.pending, (state) => {
         state.isLoading = true;
@@ -103,7 +103,7 @@ export const categorySlice = createSlice({
         state.errorMsg = action.payload;
       });
 
-    //delete category
+    //update category
     builder
       .addCase(updateCategory.pending, (state) => {
         state.isLoading = true;
