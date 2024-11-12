@@ -14,11 +14,18 @@ import { getLocalStore, setLocalStore } from "../../../helpers";
 
 const columns = (dispatch, wishlist, setWishlist) => [
   {
+    title: "Id",
+    dataIndex: "_id",
+    key: "_id",
+    width: "50px",
+    render: (text, record, index) => <span>{index + 1}</span>,
+  },
+  {
     title: "Image",
     dataIndex: "image",
     key: "image",
     render: (text, record) => (
-      <img src={text} alt={record.name} className="w-20 h-20 object-contain" />
+      <img src={text} alt={record.name} className="w-14 h-14 object-contain" />
     ),
   },
   {
@@ -150,6 +157,8 @@ export const WishList = () => {
             dataSource={items}
             rowKey={"_id"}
             rowSelection={rowSelection}
+            bordered
+            className="custom-table-row border rounded-lg "
           />
         ) : (
           <p className="text-center text-lg font-semibold">

@@ -21,8 +21,6 @@ export const ProductSidebar = ({ searchValue }) => {
           search: searchValue,
           sortBy,
           sortDirection,
-          minPrice,
-          maxPrice,
         })
       );
     }
@@ -50,8 +48,6 @@ export const ProductSidebar = ({ searchValue }) => {
         page: 1,
         limit: 10,
         search: searchValue,
-        sortBy,
-        sortDirection,
         minPrice,
         maxPrice,
       })

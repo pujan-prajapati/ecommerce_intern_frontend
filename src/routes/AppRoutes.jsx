@@ -48,18 +48,18 @@ export const AppRoutes = () => {
   return (
     <>
       <Routes>
-        {/* auth */}
-        <Route
-          path="/login"
-          element={token ? <Navigate to={"/"} /> : <LoginPage />}
-        />
-        <Route
-          path="/register"
-          element={token ? <Navigate to={"/"} /> : <RegisterPage />}
-        />
-
         {/* home layout  */}
         <Route path="/" element={<HomeLayout />}>
+          {/* auth */}
+          <Route
+            path="/login"
+            element={token ? <Navigate to={"/"} /> : <LoginPage />}
+          />
+          <Route
+            path="/register"
+            element={token ? <Navigate to={"/"} /> : <RegisterPage />}
+          />
+
           <Route index element={<Home />} />
           <Route path="/contact" element={<Contact />} />
 

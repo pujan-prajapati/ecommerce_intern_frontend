@@ -50,71 +50,75 @@ export const CategoryProducts = () => {
     [dispatch, wishlist, user, navigate]
   );
 
-  if (!products.length) {
-    return <div>No products available in this category.</div>;
-  }
-
   return (
     <>
-      <Wrapper className="flex py-0 gap-4">
-        <div className="w-[20.8333%]">
-          <ProductSidebar searchValue={products?.[0]?.category?.name} />
-        </div>
-        <div className="flex-1">
-          <section>
-            <div className="mb-5">
-              <h1 className="text-3xl font-bold">
-                Product: {products?.[0]?.category?.name}
-              </h1>
-              <p>Total: {products?.length} Products</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-fit gap-4">
-              {products.map((product) => (
-                <div
-                  className="mb-3 h-[400px] bg-gray-100 hover:shadow-md transition-all duration-300 relative"
-                  key={product._id}
-                >
-                  <Link to={`/products/${product._id}`}>
-                    <div className="h-[230px]">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full bg-white w-full object-contain"
-                      />
-                    </div>
-                  </Link>
+      <Wrapper>
+        <section className="flex gap-5 mt-5">
+          <div className="w-[20.8333%]">
+            <ProductSidebar searchValue={products?.[0]?.category?.name} />
+          </div>
+          <div className="flex-1">
+            <section>
+              <div className="mb-5">
+                <h1 className="text-3xl font-bold">
+                  Product: {products?.[0]?.category?.name}
+                </h1>
+                <p>Total: {products?.length} Products</p>
+              </div>
+              {products.length === 0 ? (
+                <p>No products found</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-fit gap-4">
+                  {products.map((product) => (
+                    <div
+                      className="mb-3 h-[400px] bg-gray-100 hover:shadow-md transition-all duration-300 relative"
+                      key={product._id}
+                    >
+                      <Link to={`/products/${product._id}`}>
+                        <div className="h-[230px]">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="h-full bg-white w-full object-contain"
+                          />
+                        </div>
+                      </Link>
 
-                  <div className="font-semibold p-2">
-                    <h1>{product.name}</h1>
-                    <p className="text-red-500">$ {product.price}</p>
-                    <p className="font-normal">
-                      {product.description.length > 50
-                        ? product.description.slice(0, 50) + "..."
-                        : product.description}
-                    </p>
-                  </div>
-                  <div
-                    className="absolute bottom-4 right-4 cursor-pointer"
-                    onClick={() => handleLike(product._id)}
-                    aria-label={`Add or remove ${product.name} from wishlist`}
-                  >
-                    {wishlist.includes(product._id) ? (
-                      <FaHeart
-                        aria-label="Added to wishlist"
-                        className="w-6 h-6 text-red-500"
-                      />
-                    ) : (
-                      <FaRegHeart
-                        aria-label="Add to wishlist"
-                        className="w-6 h-6"
-                      />
-                    )}
-                  </div>
+                      <div className="font-semibold p-2">
+                        <h1 className="text-lg">{product.name}</h1>
+                        <p className="text-red-500 text-xl">
+                          $ {product.price}
+                        </p>
+                        <p className="font-normal">
+                          {product.description.length > 50
+                            ? product.description.slice(0, 50) + "..."
+                            : product.description}
+                        </p>
+                      </div>
+                      <div
+                        className="absolute bottom-4 right-4 cursor-pointer"
+                        onClick={() => handleLike(product._id)}
+                        aria-label={`Add or remove ${product.name} from wishlist`}
+                      >
+                        {wishlist.includes(product._id) ? (
+                          <FaHeart
+                            aria-label="Added to wishlist"
+                            className="w-6 h-6 text-red-500"
+                          />
+                        ) : (
+                          <FaRegHeart
+                            aria-label="Add to wishlist"
+                            className="w-6 h-6"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </section>
-        </div>
+              )}
+            </section>
+          </div>
+        </section>
       </Wrapper>
     </>
   );

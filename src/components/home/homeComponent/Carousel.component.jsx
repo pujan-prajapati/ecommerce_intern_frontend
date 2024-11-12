@@ -7,7 +7,7 @@ export const CarouselComponent = () => {
 
   return (
     <section className="relative">
-      <Carousel draggable fade ref={ref}>
+      <Carousel draggable autoplay fade ref={ref}>
         <div className="relative">
           <img
             src="https://mdbootstrap.com/img/Photos/Slides/img%20(130).jpg"
@@ -15,7 +15,7 @@ export const CarouselComponent = () => {
             className="w-full h-96 object-fill brightness-50 opacity-50"
           />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <h1 className="text-5xl font-bold text-white">This is Home Page</h1>
+            <h1 className="text-3xl font-bold text-white">This is Home Page</h1>
           </div>
         </div>
         <div>
@@ -36,14 +36,14 @@ export const CarouselComponent = () => {
       <Button
         type="primary"
         onClick={() => ref.current.prev()}
-        className="w-12 h-12 rounded-full absolute top-1/2 left-5"
+        className="w-12 h-12 rounded-full absolute top-1/2 left-5 bg-green-500 hover:!bg-green-600"
       >
         <FaChevronLeft />
       </Button>
       <Button
         onClick={() => ref.current.next()}
         type="primary"
-        className="w-12 h-12 rounded-full absolute top-1/2 right-5"
+        className="w-12 h-12 rounded-full absolute top-1/2 right-5 bg-green-500 hover:!bg-green-600"
       >
         <FaChevronRight />
       </Button>

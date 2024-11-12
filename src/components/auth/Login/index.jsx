@@ -26,7 +26,7 @@ export const LoginComponent = () => {
   };
 
   useEffect(() => {
-    if (user && !registerSuccess) {
+    if (user && isSuccess && !registerSuccess) {
       toast.success("Login Successful");
       if (user?.role === "admin") {
         navigate("/admin");

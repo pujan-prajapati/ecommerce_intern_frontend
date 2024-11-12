@@ -17,7 +17,7 @@ export const Products = () => {
   const navigate = useNavigate();
 
   const user = getLocalStore("user");
-  const [wishlist, setWishlist] = useState(user ? user.wishlist : []);
+  const [wishlist, setWishlist] = useState(user?.wishlist || []);
 
   useEffect(() => {
     dispatch(getLatestProducts());
@@ -25,8 +25,7 @@ export const Products = () => {
 
   const handleLike = useCallback(
     (id) => {
-      const token = getLocalStore("accessToken");
-      if (token) {
+      if (user) {
         let updatedWishlist;
         if (wishlist.includes(id)) {
           updatedWishlist = wishlist.filter((item) => item !== id);
@@ -57,7 +56,7 @@ export const Products = () => {
           {products.map((product) => (
             <div
               key={product._id}
-              className=" h-[350px] relative bg-gray-100 hover:shadow-lg transition-all duration-300"
+              className="h-[300px] relative bg-gray-100 hover:shadow-lg transition-all duration-300"
             >
               <Link to={`/products/${product._id}`}>
                 <img
@@ -67,12 +66,12 @@ export const Products = () => {
                 />
               </Link>
               <div className="p-3 space-y-2 ">
-                <p>
+                <p className="text-lg">
                   {product.name.length > 50
                     ? `${product.name.slice(0, 50)}...`
                     : product.name}
                 </p>
-                <p className="text-red-500 ">$ {product.price}</p>
+                <p className="text-xl text-red-500 ">$ {product.price}</p>
                 <div
                   className="absolute bottom-4 right-4 cursor-pointer"
                   onClick={() => handleLike(product._id)}

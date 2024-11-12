@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 export const CartList = () => {
   const token = localStorage.getItem("accessToken");
 
-  const { items, isLoading } = useSelector(selectCart);
+  const { items, isLoading, errorMsg } = useSelector(selectCart);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState({});
 
@@ -23,8 +23,8 @@ export const CartList = () => {
       await dispatch(removeFromCart({ productId }));
       notify("Item deleted from cart");
       dispatch(getCart());
-    } catch (error) {
-      notify(error, "error");
+    } catch (isError) {
+      notify(errorMsg || isError, "error");
     }
   };
 
@@ -63,9 +63,10 @@ export const CartList = () => {
           </Link>
         </div>
       )}
-      {token && items && items.length === 0 ? (
+      {token && items.length === 0 ? (
         <p className="text-center text-3xl font-semibold">Cart is empty</p>
       ) : (
+        token &&
         items.map(
           (item) =>
             item.product && (
@@ -114,6 +115,18 @@ export const CartList = () => {
               </div>
             )
         )
+      )}
+
+      {token && items.length !== 0 && (
+        // TODO: link
+        <Link className="absolute bottom-5">
+          <Button
+            type="primary"
+            className="w-[32rem] bg-orange-500 hover:!bg-orange-600 !py-6"
+          >
+            Buy Now
+          </Button>
+        </Link>
       )}
     </>
   );

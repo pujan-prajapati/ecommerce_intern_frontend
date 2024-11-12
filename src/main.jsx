@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Provider store={store}>
       <AppRoutes />
-      <ToastContainer />
+      <ToastContainer autoClose={1000} closeOnClick draggable hideProgressBar />
     </Provider>
   </BrowserRouter>
   // </StrictMode>

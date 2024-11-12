@@ -34,7 +34,7 @@ export const BuyProduct = () => {
         orderItem({ ...values, productDetails: id, quantity: initialQuantity })
       );
       notify("Order Placed Successfully");
-      navigate(`/products/${id}`);
+      navigate("/orders");
     } catch (error) {
       notify(errorMsg + error, "error");
     }
@@ -42,151 +42,155 @@ export const BuyProduct = () => {
 
   return (
     <>
-      <Wrapper className={"flex gap-10 items-center justify-center mt-10"}>
-        <figure>
-          <img
-            src={product?.image}
-            alt={product?.name}
-            className="w-96 object-cover"
-          />
-          <figcaption className="font-semibold">
-            Product Name : {product?.name}
-          </figcaption>
-        </figure>
-
-        <Form layout="vertical" onFinish={handleFinish}>
-          {/* Delivery */}
-
-          <h1>Quantity : {initialQuantity}</h1>
-
-          <h1 className="mb-3 text-2xl font-bold">Delivery</h1>
-
-          {/* select country */}
-          <Form.Item
-            className="w-[500px]"
-            name="country"
-            rules={[
-              {
-                required: true,
-                message: "Please input your delivery!",
-              },
-            ]}
-          >
-            <Select size="large" placeholder="Select Country">
-              <Select.Option value="Nepal">Nepal</Select.Option>
-            </Select>
-          </Form.Item>
-
-          {/* name */}
-          <div className="flex gap-2">
-            <Form.Item
-              name="firstName"
-              className="w-[245px]"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your fist name!",
-                },
-              ]}
-            >
-              <Input size="large" placeholder="Enter first name" />
-            </Form.Item>
-
-            <Form.Item
-              className="w-[245px]"
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your last name!",
-                },
-              ]}
-            >
-              <Input size="large" placeholder="Enter last name" />
-            </Form.Item>
+      <Wrapper>
+        <section className={"flex gap-10  justify-center mt-10"}>
+          <div>
+            <img
+              src={product?.image}
+              alt={product?.name}
+              className="w-full h-[500px] object-contain"
+            />
           </div>
+          <Form layout="vertical" onFinish={handleFinish}>
+            {/* Delivery */}
 
-          {/* address */}
-          <Form.Item
-            className="w-[500px]"
-            name="address"
-            rules={[
-              {
-                required: true,
-                message: "Please input your address!",
-              },
-            ]}
-          >
-            <Input size="large" placeholder="Enter address" />
-          </Form.Item>
+            <h1 className="mb-3 text-2xl font-bold">Delivery</h1>
 
-          {/* city */}
-          <Form.Item
-            className="w-[500px]"
-            name="city"
-            rules={[
-              {
-                required: true,
-                message: "Please input your city!",
-              },
-            ]}
-          >
-            <Input size="large" placeholder="Enter city" />
-          </Form.Item>
-
-          {/* phoneNumber */}
-          <Form.Item
-            className="w-[500px]"
-            name="phoneNumber"
-            rules={[
-              {
-                required: true,
-                message: "Please input your phone number!",
-              },
-            ]}
-          >
-            <Input size="large" placeholder="Enter phone number" />
-          </Form.Item>
-
-          <h1 className="text-2xl font-bold mb-2">Payment method</h1>
-
-          <Form.Item
-            className="w-[500px]"
-            name="paymentMethod"
-            rules={[
-              {
-                required: true,
-                message: "Please select your payment method!",
-              },
-            ]}
-          >
-            <Select
-              size="large"
-              placeholder="Select payment method"
-              onChange={handleEsewa}
+            {/* select country */}
+            <Form.Item
+              className="w-[500px]"
+              name="country"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your delivery!",
+                },
+              ]}
             >
-              <Select.Option value="cod">Cash on delivery</Select.Option>
-              <Select.Option value="esewa">ESEWA</Select.Option>
-            </Select>
-          </Form.Item>
-          {selectEsewa && (
-            <div className="-mt-6  bg-gray-100 w-[500px] p-2 font-bold rounded-lg">
-              <p>Esewa id : 9876543210</p>
-              <p>Esewa id Name : My Store</p>
+              <Select size="large" placeholder="Select Country">
+                <Select.Option value="Nepal">Nepal</Select.Option>
+              </Select>
+            </Form.Item>
+
+            {/* name */}
+            <div className="flex gap-2">
+              <Form.Item
+                name="firstName"
+                className="w-[245px]"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your fist name!",
+                  },
+                ]}
+              >
+                <Input size="large" placeholder="Enter first name" />
+              </Form.Item>
+
+              <Form.Item
+                className="w-[245px]"
+                name="lastName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your last name!",
+                  },
+                ]}
+              >
+                <Input size="large" placeholder="Enter last name" />
+              </Form.Item>
             </div>
-          )}
 
-          <Form.Item className="w-[500px]">
-            <Button
-              htmlType="submit"
-              type="primary"
-              className="bg-yellow-500 w-full py-6 rounded-md text-xl font-bold text-white mt-2 hover:!bg-yellow-600 transition-all ease-in-out duration-300"
-              loading={isLoading}
+            {/* address */}
+            <Form.Item
+              className="w-[500px]"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your address!",
+                },
+              ]}
             >
-              Complete Order
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input size="large" placeholder="Enter address" />
+            </Form.Item>
+
+            {/* city */}
+            <Form.Item
+              className="w-[500px]"
+              name="city"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your city!",
+                },
+              ]}
+            >
+              <Input size="large" placeholder="Enter city" />
+            </Form.Item>
+
+            {/* phoneNumber */}
+            <Form.Item
+              className="w-[500px]"
+              name="phoneNumber"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your phone number!",
+                },
+              ]}
+            >
+              <Input size="large" placeholder="Enter phone number" />
+            </Form.Item>
+
+            <h1 className="text-2xl font-bold mb-2">Payment method</h1>
+
+            <Form.Item
+              className="w-[500px]"
+              name="paymentMethod"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select your payment method!",
+                },
+              ]}
+            >
+              <Select
+                size="large"
+                placeholder="Select payment method"
+                onChange={handleEsewa}
+              >
+                <Select.Option value="cod">Cash on delivery</Select.Option>
+                <Select.Option value="esewa">ESEWA</Select.Option>
+              </Select>
+            </Form.Item>
+            {selectEsewa && (
+              <div className="-mt-6  bg-gray-100 w-[500px] p-2 font-bold rounded-lg">
+                <p>Esewa id : 9876543210</p>
+                <p>Esewa id Name : My Store</p>
+              </div>
+            )}
+
+            <Form.Item className="w-[500px]">
+              <Button
+                htmlType="submit"
+                type="primary"
+                block
+                className="bg-orange-500 py-6 font-semibold text-white  hover:!bg-orange-600 shadow-none"
+                loading={isLoading}
+              >
+                Complete Order
+              </Button>
+            </Form.Item>
+          </Form>
+        </section>
+        <section className="w-1/3 mx-auto mt-12">
+          <h2 className="text-2xl font-semibold mb-2">Product Details</h2>
+          <div className="bg-gray-100 p-3 ">
+            <p>Product Name : {product?.name}</p>
+            <p>Quantity : {initialQuantity}</p>
+          </div>
+        </section>
       </Wrapper>
     </>
   );

@@ -18,7 +18,7 @@ export const Categories = () => {
     <>
       <Wrapper>
         <HomeHeader title="Categories" />
-        <section className="grid grid-cols-3 md:grid-cols-6 gap-3">
+        <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {categories.map((category) => (
             <Link key={category._id} to={`/category/${category._id}`}>
               <div className="h-64 bg-gray-100 hover:shadow-lg transition-all duration-300">

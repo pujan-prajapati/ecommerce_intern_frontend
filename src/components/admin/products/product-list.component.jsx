@@ -148,6 +148,7 @@ export const ProductList = () => {
               <FaTrash /> Delete Selected
             </Button>
           </div>
+
           <Table
             columns={columns}
             rowSelection={rowSelection}
