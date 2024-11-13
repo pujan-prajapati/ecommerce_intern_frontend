@@ -22,8 +22,10 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getCart());
-  }, [dispatch]);
+    if (token) {
+      dispatch(getCart());
+    }
+  }, [dispatch, token]);
 
   const showDrawer = () => {
     dispatch(getCart());

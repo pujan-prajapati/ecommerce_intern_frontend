@@ -25,3 +25,7 @@
 button {
   @apply !shadow-none;
 }
+
+.contact-form .ant-input {
+  @apply !shadow-none border-orange-400 focus:border-orange-600 hover:!border-orange-600;
+}

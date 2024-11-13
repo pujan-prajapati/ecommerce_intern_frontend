@@ -119,10 +119,11 @@ export const CartList = () => {
 
       {token && items.length !== 0 && (
         // TODO: link
-        <Link className="absolute bottom-5">
+        <Link>
           <Button
             type="primary"
-            className="w-[32rem] bg-orange-500 hover:!bg-orange-600 !py-6"
+            block
+            className=" bg-orange-500 hover:!bg-orange-600 !py-6"
           >
             Buy Now
           </Button>
