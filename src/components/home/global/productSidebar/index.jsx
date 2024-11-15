@@ -2,63 +2,73 @@
 import { Button, InputNumber, notification, Select } from "antd";
 import { useDispatch } from "react-redux";
 import { getAllProducts } from "../../../../redux/features/products/product.service";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HiArrowsUpDown } from "react-icons/hi2";
 
-export const ProductSidebar = ({ searchValue }) => {
+export const ProductSidebar = ({ searchValue, products }) => {
   const dispatch = useDispatch();
   const [sortBy, setSortBy] = useState(null);
   const [sortDirection, setSortDirectin] = useState("asc");
   const [minPrice, setMinPrice] = useState(null);
   const [maxPrice, setMaxPrice] = useState(null);
 
-  useEffect(() => {
-    if (sortBy) {
-      dispatch(
-        getAllProducts({
-          page: 1,
-          limit: 10,
-          search: searchValue,
-          sortBy,
-          sortDirection,
-        })
-      );
-    }
-  }, [dispatch, sortBy, sortDirection, searchValue, minPrice, maxPrice]);
-
-  const handleSortChange = (value) => {
-    setSortBy(value);
-  };
-
-  const toggleSortDirection = () => {
-    setSortDirectin((prev) => (prev === "asc" ? "desc" : "asc"));
-  };
-
-  const handlePriceFilter = () => {
-    if (maxPrice < minPrice) {
-      // Show error message
-      notification.error({
-        message: "Invalid Price Range",
-        description: "The maximum price cannot be less than the minimum price.",
-      });
-      return;
-    }
+  const filterProduct = (sortBy, sortDirection, minPrice, maxPrice) => {
     dispatch(
       getAllProducts({
         page: 1,
         limit: 10,
         search: searchValue,
+        sortBy,
+        sortDirection,
         minPrice,
         maxPrice,
       })
     );
   };
 
+  const handleSortChange = (value) => {
+    setSortBy(value);
+    filterProduct(value, sortDirection, minPrice, maxPrice);
+  };
+
+  const toggleSortDirection = () => {
+    const newDirection = sortDirection === "asc" ? "desc" : "asc"; // Toggle between "asc" and "desc"
+    setSortDirectin(newDirection);
+    filterProduct(sortBy, newDirection, minPrice, maxPrice);
+  };
+
+  const handlePriceFilter = () => {
+    // Find the lowest price in the products list
+    const lowestPrice = Math.min(...products.map((product) => product.price));
+
+    // Check if maxPrice is less than the lowest product price
+    if (maxPrice < lowestPrice) {
+      notification.error({
+        message: "Max Price Too Low",
+        description: `The maximum price cannot be less than the lowest product price of $${lowestPrice}.`,
+      });
+      return;
+    }
+
+    if (maxPrice < minPrice) {
+      notification.error({
+        message: "Invalid Price Range",
+        description: "The maximum price cannot be less than the minimum price.",
+      });
+      return;
+    }
+
+    filterProduct(sortBy, sortDirection, minPrice, maxPrice);
+  };
+
   return (
     <div>
       {sortBy && (
         <Button type="primary" className="mb-2" onClick={toggleSortDirection}>
-          <HiArrowsUpDown /> {sortDirection === "asc" ? "Desc" : "Asc"}
+          <HiArrowsUpDown />{" "}
+          {sortDirection === "asc"
+            ? "Filter from High to Low"
+            : "Filter from Low to High"}
         </Button>
       )}
       <Select

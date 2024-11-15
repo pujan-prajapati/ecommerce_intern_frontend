@@ -1,4 +1,4 @@
-import { Button, Table } from "antd";
+import { Button, Table, Tag } from "antd";
 import { AdminHeader } from "../AdminHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOrder } from "../../../redux/features/orders/order.slice";
@@ -7,97 +7,73 @@ import {
   deleteOrder,
   getAllOrders,
 } from "../../../redux/features/orders/order.service";
-import { TableTag } from "../common/TableTag";
 import { TableActionBtn } from "../common/TableActionBtn";
 import Swal from "sweetalert2";
-import { FaTrash } from "react-icons/fa";
+import { FaRegEye, FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
-    title: "PRODUCTS",
-    dataIndex: "products",
-    render: (text, record) => (
-      <div className="flex gap-3">
-        <img
-          src={record.product.productDetails.image}
-          className="w-14 h-14 object-contain rounded-md"
-          alt={record.product.productDetails.name}
-        />
-        <div className="max-w-52">
-          <strong>{record.product.productDetails.name}</strong>
-        </div>
-      </div>
-    ),
+    title: "SN",
+    dataIndex: "_id",
+    key: "_id",
+    render: (text, render, index) => <p>{index + 1}</p>,
   },
   {
-    title: "CUSTOMER",
-    dataIndex: "customer",
-    render: (text, record) => (
-      <p className="font-semibold capitalize">
-        {record.firstName + " " + record.lastName}
-      </p>
-    ),
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    render: (text, record) => <p>{record.firstName + " " + record.lastName}</p>,
   },
   {
-    title: "CONTACT",
-    dataIndex: "phoneNumber",
-    render: (text) => <p className="font-semibold ">{text}</p>,
+    title: "Payment Method",
+    dataIndex: "paymentMethod",
+    key: "paymentMethod",
+    render: (text, record) => <p>{record.paymentMethod.toUpperCase()}</p>,
   },
   {
-    title: "QUANTITY",
-    dataIndex: "quantity",
-    render: (text, record) => (
-      <p className="text-lg font-semibold">{record.product.quantity}</p>
-    ),
-  },
-  {
-    title: "PRICE",
-    dataIndex: "price",
-    render: (text, record) => (
-      <p className="text-lg text-red-500 font-semibold">
-        ${record.product.price}
-      </p>
-    ),
-  },
-
-  {
-    title: "STATUS",
+    title: "Status",
     dataIndex: "status",
-    render: (text) => (
-      <TableTag
-        tagTitle={text}
-        tagColor={
-          text === "pending"
-            ? "blue"
-            : text === "processing"
+    key: "status",
+    render: (text, record) => (
+      <Tag
+        color={
+          record.status === "pending"
             ? "yellow"
-            : text === "shipped"
-            ? "cyan"
-            : text === "delivered"
+            : record.status === "processing"
+            ? "orange"
+            : record.status === "shipped"
+            ? "blue"
+            : record.status === "delivered"
             ? "green"
             : "red"
         }
-      />
+        key={record.status}
+      >
+        {record.status}
+      </Tag>
     ),
   },
   {
-    title: "PAYMENT METHOD",
-    dataIndex: "paymentMethod",
-    render: (text) => (
-      <p className="uppercase font-semibold">
-        {text === "cod" ? "Cash On Delivery" : text}
-      </p>
-    ),
+    title: "Total Price",
+    dataIndex: "totalPrice",
+    key: "totalPrice",
+    render: (text, record) => <p>$ {record.totalPrice}</p>,
   },
   {
-    title: "ADDRESS",
-    dataIndex: "address",
-    render: (text, record) => (
-      <>
-        <p>{record.location.address}</p>
-        <p className="font-semibold">{record.location.city}</p>
-      </>
-    ),
+    title: "Total Items",
+    dataIndex: "totalItems",
+    key: "totalItems",
+    render: (text, record) => <p>{record.product.length} items</p>,
+  },
+  {
+    title: "Ordered Date",
+    dataIndex: "createdAt",
+    key: "createdAt",
+    render: (text, record) => {
+      const date = new Date(record.createdAt);
+      return <p>{date.toLocaleDateString()}</p>;
+    },
   },
   {
     title: "ACTIONS",
@@ -105,12 +81,20 @@ const columns = [
     align: "right",
     width: 200,
     render: (text, record) => (
-      <TableActionBtn
-        to={`/admin/orders/edit/${record._id}`}
-        id={record._id}
-        action={deleteOrder}
-        afterAction={getAllOrders}
-      />
+      <div className="flex gap-3">
+        {/* TODO: Add view order details link */}
+        <Link to={``}>
+          <Button type="primary" className="bg-orange-500 hover:!bg-orange-600">
+            <FaRegEye />
+          </Button>
+        </Link>
+        <TableActionBtn
+          to={`/admin/orders/edit/${record._id}`}
+          id={record._id}
+          action={deleteOrder}
+          afterAction={getAllOrders}
+        />
+      </div>
     ),
   },
 ];
@@ -144,7 +128,7 @@ export const OrderList = () => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deleting...",
-          text: "Please wait while we delete the admin.",
+          text: "Please wait while we delete the orders.",
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
@@ -157,7 +141,7 @@ export const OrderList = () => {
         setSelectedRowKeys([]);
         Swal.fire({
           title: "Deleted!",
-          text: "Selected users have been deleted.",
+          text: "Selected orders have been deleted.",
           icon: "success",
         });
       }

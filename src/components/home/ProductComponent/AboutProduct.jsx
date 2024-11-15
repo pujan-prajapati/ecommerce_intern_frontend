@@ -104,7 +104,12 @@ export const AboutProduct = () => {
                   Quantity
                 </span>{" "}
                 :{" "}
-                <InputNumber min={1} defaultValue={1} onChange={setQuantity} />
+                <InputNumber
+                  min={1}
+                  max={product?.quantity}
+                  defaultValue={1}
+                  onChange={setQuantity}
+                />
               </div>
 
               <div className="flex flex-col">

@@ -51,84 +51,89 @@ export const CartList = () => {
 
   return (
     <>
-      {!token && (
-        <div className="flex flex-col justify-center items-center gap-6">
-          <p className="text-center text-3xl font-semibold">
-            Please Login to view cart
-          </p>
-          <Link to={"/login"}>
-            <Button type="primary" className="w-40 py-5">
-              Login
-            </Button>
-          </Link>
-        </div>
-      )}
-      {token && items.length === 0 ? (
-        <p className="text-center text-3xl font-semibold">Cart is empty</p>
-      ) : (
-        token &&
-        items.map(
-          (item) =>
-            item.product && (
-              <div key={item._id} className="flex justify-between mb-7 ">
-                <div className="flex gap-4 items-center">
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-20 h-28 object-contain"
-                  />
+      <div className="flex flex-col h-full">
+        {!token && (
+          <div className="flex flex-col justify-center items-center gap-6">
+            <p className="text-center text-3xl font-semibold">
+              Please Login to view cart
+            </p>
+            <Link to={"/login"}>
+              <Button type="primary" className="w-40 py-5">
+                Login
+              </Button>
+            </Link>
+          </div>
+        )}
+        {token && items.length === 0 ? (
+          <p className="text-center text-3xl font-semibold">Cart is empty</p>
+        ) : (
+          token &&
+          items.map(
+            (item) =>
+              item?.product && (
+                <div key={item?._id} className="flex justify-between mb-7 ">
+                  <div className="flex gap-4 ">
+                    <img
+                      src={item?.product?.image}
+                      alt={item?.product?.name}
+                      className="w-20 h-28 object-contain"
+                    />
 
-                  <div className="space-y-2 max-w-60">
-                    <p className="text-lg font-bold">{item.product.name}</p>
-                    <p className="text-lg text-red-500 font-semibold">
-                      $ {item.product.price}
-                    </p>
-                    <div className="flex gap-5">
-                      <InputNumber
-                        min={1}
-                        value={quantity[item.product._id] || item.quantity}
-                        type="number"
-                        onChange={(value) =>
-                          handleQuantityChange(item.product._id, value)
-                        }
-                        onBlur={() =>
-                          handleQuantityBlurOrEnter(item.product._id)
-                        }
-                        onKeyDown={(event) =>
-                          handleKeyDown(event, item.product._id)
-                        }
-                      />
-                      <Button
-                        type="primary"
-                        danger
-                        onClick={() => deleteCartItem(item.product._id)}
-                      >
-                        <FaTrash />
-                      </Button>
+                    <div className="space-y-2 max-w-72">
+                      <p className="text-lg font-bold">{item?.product?.name}</p>
+                      <p className="text-lg text-red-500 font-semibold">
+                        $ {item?.product?.price}
+                      </p>
+                      <p>Quantity : {item?.product?.quantity}</p>
+                      <div className="flex gap-5">
+                        <InputNumber
+                          min={1}
+                          max={item?.product?.quantity}
+                          value={quantity[item?.product?._id] || item?.quantity}
+                          type="number"
+                          onChange={(value) =>
+                            handleQuantityChange(item?.product?._id, value)
+                          }
+                          onBlur={() =>
+                            handleQuantityBlurOrEnter(item?.product?._id)
+                          }
+                          onKeyDown={(event) =>
+                            handleKeyDown(event, item?.product?._id)
+                          }
+                        />
+                        <Button
+                          type="primary"
+                          danger
+                          onClick={() => deleteCartItem(item?.product?._id)}
+                        >
+                          <FaTrash />
+                        </Button>
+                      </div>
                     </div>
                   </div>
+
+                  <p className="text-lg text-red-500 font-semibold">
+                    $ {item?.product?.price * item?.quantity}
+                  </p>
                 </div>
+              )
+          )
+        )}
 
-                <p className="text-lg text-red-500 font-semibold">
-                  $ {item.product.price * item.quantity}
-                </p>
-              </div>
-            )
-        )
-      )}
-
-      {token && items.length !== 0 && (
-        // TODO: link
-        <Link>
-          <Button
-            type="primary"
-            block
-            className=" bg-orange-500 hover:!bg-orange-600 !py-6"
-          >
-            Buy Now
-          </Button>
-        </Link>
-      )}
+        {token && items.length !== 0 && (
+          <div className="mt-auto ">
+            <Link to={"/cart/buy"}>
+              <Button
+                type="primary"
+                block
+                className=" bg-orange-500 hover:!bg-orange-600 !py-6"
+              >
+                Buy Now
+              </Button>
+            </Link>
+          </div>
+        )}
+      </div>
     </>
   );
 };

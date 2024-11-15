@@ -3,7 +3,7 @@ import { CarouselComponent } from "./homeComponent/Carousel.component";
 import { AboutProduct } from "./ProductComponent/AboutProduct";
 import { BuyProduct } from "./ProductComponent/BuyProduct";
 import { SearchProducts } from "./ProductComponent/SearchProducts.jsx";
-import { CategoryProducts, CategorySidebar } from "./CategoryComponent";
+import { CategoryProducts } from "./CategoryComponent";
 
 export {
   Navbar,
@@ -14,5 +14,4 @@ export {
   BuyProduct,
   SearchProducts,
   CategoryProducts,
-  CategorySidebar,
 };

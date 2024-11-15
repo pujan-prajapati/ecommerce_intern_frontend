@@ -16,7 +16,6 @@ const initialState = {
   isSuccess: false,
   isError: false,
   errorMsg: "",
-  totalPages: 1,
   currentPage: 1,
   totalCount: 0,
 };
@@ -98,6 +97,7 @@ export const orderSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
+        state.order = null;
       })
       .addCase(getOrderById.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -171,7 +171,6 @@ export const orderSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.orders = action.payload.orders;
-        state.totalPages = action.payload.totalPages;
         state.currentPage = action.payload.currentPage;
         state.totalCount = action.payload.totalCount;
       })

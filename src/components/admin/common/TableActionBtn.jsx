@@ -21,7 +21,7 @@ export const TableActionBtn = ({ id, action, to, afterAction }) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deleting...",
-          text: "Please wait while we delete the user.",
+          text: "Please wait while we delete.",
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
@@ -31,7 +31,7 @@ export const TableActionBtn = ({ id, action, to, afterAction }) => {
         dispatch(afterAction());
         Swal.fire({
           title: "Deleted!",
-          text: "Your file has been deleted.",
+          text: "Deleted Successfully.",
           icon: "success",
         });
       }

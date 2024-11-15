@@ -5,7 +5,7 @@ import { selectProduct } from "../../../redux/features/products/product.slice";
 import { useEffect } from "react";
 import { getAllProducts } from "../../../redux/features/products/product.service";
 import { ProductSidebar } from "../global/productSidebar";
-import { Pagination } from "antd";
+import { Pagination, Spin } from "antd";
 
 export const SearchProducts = () => {
   const { search } = useLocation();
@@ -13,7 +13,7 @@ export const SearchProducts = () => {
   const searchValue = searchParams.get("search") || "";
 
   const dispatch = useDispatch();
-  const { products, totalPages, currentPage, totalProducts } =
+  const { products, isLoading, totalPages, currentPage, totalProducts } =
     useSelector(selectProduct);
 
   useEffect(() => {
@@ -31,32 +31,36 @@ export const SearchProducts = () => {
             <h1>Search Results for : {searchValue} </h1>
             <p>Total Products : {products.length}</p>
             <div className="mt-10 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-fit gap-4">
-              {products.map((product) => (
-                <div
-                  className="mb-3 h-[400px] bg-gray-100 hover:shadow-md transition-all duration-300 relative"
-                  key={product._id}
-                >
-                  <Link to={`/products/${product._id}`}>
-                    <div className="h-[230px]">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full bg-white w-full object-contain"
-                      />
-                    </div>
-                  </Link>
+              {isLoading ? (
+                <Spin />
+              ) : (
+                products.map((product) => (
+                  <div
+                    className="mb-3 h-[400px] bg-gray-100 hover:shadow-md transition-all duration-300 relative"
+                    key={product._id}
+                  >
+                    <Link to={`/products/${product._id}`}>
+                      <div className="h-[230px]">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="h-full bg-white w-full object-contain"
+                        />
+                      </div>
+                    </Link>
 
-                  <div className="font-semibold p-2">
-                    <h1>{product.name}</h1>
-                    <p className="text-red-500">$ {product.price}</p>
-                    <p className="font-normal">
-                      {product.description.length > 50
-                        ? product.description.slice(0, 50) + "..."
-                        : product.description}
-                    </p>
+                    <div className="font-semibold p-2">
+                      <h1>{product.name}</h1>
+                      <p className="text-red-500">$ {product.price}</p>
+                      <p className="font-normal">
+                        {product.description.length > 50
+                          ? product.description.slice(0, 50) + "..."
+                          : product.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </section>
 

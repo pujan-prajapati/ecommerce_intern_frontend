@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Col, Form, Input, Select, Spin } from "antd";
 import { Wrapper } from "../global";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -7,13 +7,16 @@ import { getProductById } from "../../../redux/features/products/product.service
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { selectOrder } from "../../../redux/features/orders/order.slice";
 import { notify } from "../../../helpers";
-import { orderItem } from "../../../redux/features/orders/order.service";
+import {
+  getUserOrders,
+  orderItem,
+} from "../../../redux/features/orders/order.service";
 
 export const BuyProduct = () => {
   const [selectEsewa, setSelectEsewa] = useState(false);
   const { id } = useParams();
   const { state } = useLocation();
-  const { product } = useSelector(selectProduct);
+  const { product, isLoading: productLoading } = useSelector(selectProduct);
   const dispatch = useDispatch();
   const { isLoading, errorMsg } = useSelector(selectOrder);
   const navigate = useNavigate();
@@ -29,16 +32,24 @@ export const BuyProduct = () => {
   };
 
   const handleFinish = (values) => {
+    const orderData = {
+      productId: id,
+      quantity: initialQuantity,
+    };
+
     try {
       dispatch(
-        orderItem({ ...values, productDetails: id, quantity: initialQuantity })
+        orderItem({ ...values, product: orderData, totalPrice: product?.price })
       );
       notify("Order Placed Successfully");
+      dispatch(getUserOrders({ page: 1, limit: 10 }));
       navigate("/orders");
     } catch (error) {
       notify(errorMsg + error, "error");
     }
   };
+
+  if (productLoading) return <Spin fullscreen />;
 
   return (
     <>
@@ -74,31 +85,29 @@ export const BuyProduct = () => {
 
             {/* name */}
             <div className="flex gap-2">
-              <Form.Item
-                name="firstName"
-                className="w-[245px]"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your fist name!",
-                  },
-                ]}
-              >
-                <Input size="large" placeholder="Enter first name" />
-              </Form.Item>
-
-              <Form.Item
-                className="w-[245px]"
-                name="lastName"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your last name!",
-                  },
-                ]}
-              >
-                <Input size="large" placeholder="Enter last name" />
-              </Form.Item>
+              <Col span={12}>
+                <Form.Item
+                  name="firstName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your first name!",
+                    },
+                  ]}
+                >
+                  <Input size="large" placeholder="Enter first name" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="lastName"
+                  rules={[
+                    { required: true, message: "Please input your last name!" },
+                  ]}
+                >
+                  <Input size="large" placeholder="Enter last name" />
+                </Form.Item>
+              </Col>
             </div>
 
             {/* address */}

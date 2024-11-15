@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import {
   getAllAdmins,
   deleteUser,
-  getAllUsers,
 } from "../../../redux/features/accounts/accounts.service";
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
@@ -53,7 +52,7 @@ const columns = [
       <TableActionBtn
         id={record._id}
         action={deleteUser}
-        afterAction={getAllUsers}
+        afterAction={getAllAdmins}
         to={`/admin/accounts/edit/${record._id}`}
       />
     ),

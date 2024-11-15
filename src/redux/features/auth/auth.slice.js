@@ -17,7 +17,16 @@ const initialState = {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.items = null;
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.registerSuccess = false;
+      state.errorMsg = "";
+    },
+  },
   extraReducers: (builder) => {
     //register
     builder
@@ -36,12 +45,10 @@ export const authSlice = createSlice({
         state.errorMsg = action.payload || "Registration failed";
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        const user = action.payload;
-
         state.isLoading = false;
         state.isSuccess = true;
         state.registerSuccess = true;
-        state.items = user;
+        state.items = action.payload;
         state.isError = false;
       });
 
@@ -94,3 +101,4 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 export const selectAuth = (state) => state.auth;
+export const { reset } = authSlice.actions;

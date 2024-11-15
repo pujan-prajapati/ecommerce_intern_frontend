@@ -10,7 +10,8 @@ import { Button, Table } from "antd";
 import { FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { getLocalStore, setLocalStore } from "../../../helpers";
+import { getLocalStore, notify, setLocalStore } from "../../../helpers";
+import { addToCart } from "../../../redux/features/cart/cart.service";
 
 const columns = (dispatch, wishlist, setWishlist) => [
   {
@@ -51,6 +52,19 @@ const columns = (dispatch, wishlist, setWishlist) => [
       <div className="flex gap-2 justify-end">
         <Button
           type="primary"
+          className="bg-orange-500 hover:!bg-orange-600"
+          onClick={() =>
+            dispatch(addToCart({ productId: record._id, quantity: 1 })).then(
+              () => {
+                notify("Item added to cart");
+              }
+            )
+          }
+        >
+          Add To Cart
+        </Button>
+        <Button
+          type="primary"
           danger
           icon={<FaTrash />}
           onClick={() =>
@@ -69,7 +83,11 @@ const columns = (dispatch, wishlist, setWishlist) => [
           }
         />
         <Link to={`/products/${record._id}`}>
-          <Button type="primary" icon={<FaEye />} />
+          <Button
+            type="primary"
+            className="bg-green-500 hover:!bg-green-600"
+            icon={<FaEye />}
+          />
         </Link>
       </div>
     ),
@@ -129,7 +147,7 @@ export const WishList = () => {
         setSelectedRowKeys([]);
         Swal.fire({
           title: "Deleted!",
-          text: "Selected users have been deleted.",
+          text: "Deleted Successfully.",
           icon: "success",
         });
       }

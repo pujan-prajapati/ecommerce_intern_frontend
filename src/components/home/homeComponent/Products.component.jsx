@@ -50,7 +50,7 @@ export const Products = () => {
   return (
     <>
       <Wrapper>
-        <HomeHeader title={"Products"} />
+        <HomeHeader title={"Latest Products"} />
 
         <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
           {products.map((product) => (

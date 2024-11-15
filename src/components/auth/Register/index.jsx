@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { AuthHeader } from "../AuthHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../redux/features/auth/auth.service";
-import { selectAuth } from "../../../redux/features/auth/auth.slice";
+import { reset, selectAuth } from "../../../redux/features/auth/auth.slice";
 import { useEffect, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
@@ -44,10 +44,11 @@ export const RegisterComponent = () => {
       navigate("/login");
       form.resetFields();
       setFileList([]);
+      dispatch(reset());
     } else if (isError) {
       toast.error(errorMsg || "Registeration Failed");
     }
-  }, [isSuccess, isError, errorMsg, navigate, form, registerSuccess]);
+  }, [isSuccess, isError, errorMsg, navigate, form, registerSuccess, dispatch]);
 
   if (isLoading) {
     return (

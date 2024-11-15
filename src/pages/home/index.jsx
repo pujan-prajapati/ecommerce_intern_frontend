@@ -4,6 +4,7 @@ import { ProductPage } from "./products";
 import { CategoryPage } from "./category";
 import { OrderPage, OrderDetails } from "./order";
 import { WishList } from "./wishlist/wishlist.page";
+import { CartBuy } from "./cartBuy/CartBuy.page";
 
 export {
   Home,
@@ -13,4 +14,5 @@ export {
   OrderPage,
   OrderDetails,
   WishList,
+  CartBuy,
 };

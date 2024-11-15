@@ -91,8 +91,6 @@ export const ProductList = () => {
     dispatch(getAllProducts({ page: currentPage, limit: 10 }));
   }, [dispatch, currentPage]);
 
-  console.log(products);
-
   const handleDeleteSelected = () => {
     Swal.fire({
       title: "Are you sure?",

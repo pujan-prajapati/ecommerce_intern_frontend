@@ -24,6 +24,7 @@ import {
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
 import {
+  CartBuy,
   CategoryPage,
   Contact,
   Home,
@@ -77,9 +78,11 @@ export const AppRoutes = () => {
           </Route>
 
           <Route path="/orders" element={<OrderPage />} />
-          <Route path="/orders/getorder/:id" element={<OrderDetails />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
 
           <Route path="/wishlist" element={<WishList />} />
+
+          <Route path="/cart/buy" element={<CartBuy />} />
         </Route>
 
         {/* admin layout */}

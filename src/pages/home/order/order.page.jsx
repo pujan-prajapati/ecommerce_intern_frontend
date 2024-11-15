@@ -1,6 +1,6 @@
 import { Wrapper } from "../../../components/home/global/wrapper";
 import { HomeHeader } from "../../../components/home/global/homeHeader";
-import { OrderCard } from "../../../components/home/OrderComponent/order.card.component";
+import { MyOrder } from "../../../components/home/OrderComponent/MyOrder.component";
 
 export const OrderPage = () => {
   return (
@@ -8,7 +8,7 @@ export const OrderPage = () => {
       <Wrapper>
         <HomeHeader className={"text-center"} title={"My Order"} />
 
-        <OrderCard />
+        <MyOrder />
       </Wrapper>
     </>
   );

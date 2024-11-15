@@ -11,10 +11,11 @@ import {
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { ProductSidebar } from "../global/productSidebar";
 import { Wrapper } from "../global";
+import { Spin } from "antd";
 
 export const CategoryProducts = () => {
   const { id } = useParams();
-  const { products } = useSelector(selectProduct);
+  const { products, isLoading } = useSelector(selectProduct);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -55,7 +56,10 @@ export const CategoryProducts = () => {
       <Wrapper>
         <section className="flex gap-5 mt-5">
           <div className="w-[20.8333%]">
-            <ProductSidebar searchValue={products?.[0]?.category?.name} />
+            <ProductSidebar
+              searchValue={products?.[0]?.category?.name}
+              products={products}
+            />
           </div>
           <div className="flex-1">
             <section>
@@ -65,7 +69,9 @@ export const CategoryProducts = () => {
                 </h1>
                 <p>Total: {products?.length} Products</p>
               </div>
-              {products.length === 0 ? (
+              {isLoading ? (
+                <Spin className="flex justify-center items-center" />
+              ) : products.length === 0 ? (
                 <p>No products found</p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 h-fit gap-4">
