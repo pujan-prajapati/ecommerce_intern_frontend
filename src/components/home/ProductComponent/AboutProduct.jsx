@@ -4,7 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectProduct } from "../../../redux/features/products/product.slice";
 import { useEffect, useState } from "react";
 import { getProductById } from "../../../redux/features/products/product.service";
-import { Button, Form, Input, InputNumber, Spin } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Pagination,
+  Rate,
+  Spin,
+  Tag,
+} from "antd";
 import { addToCart } from "../../../redux/features/cart/cart.service";
 import { getLocalStore, notify } from "../../../helpers";
 import { selectCart } from "../../../redux/features/cart/cart.slice";
@@ -17,6 +26,8 @@ import {
 import { selectComments } from "../../../redux/features/comments/comment.slice";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
 import { FaTrash } from "react-icons/fa";
+import { getReviews } from "../../../redux/features/reviews/reviews.service";
+import { selectReviews } from "../../../redux/features/reviews/reviews.slice";
 
 export const AboutProduct = () => {
   const { id } = useParams();
@@ -26,6 +37,7 @@ export const AboutProduct = () => {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const { comments } = useSelector(selectComments);
+  const { reviews } = useSelector(selectReviews);
   const navigate = useNavigate();
 
   const user = getLocalStore("user");
@@ -33,6 +45,7 @@ export const AboutProduct = () => {
   useEffect(() => {
     dispatch(getProductById(id));
     dispatch(getComments(id));
+    dispatch(getReviews(id));
   }, [dispatch, id]);
 
   const handleAddToCart = async () => {
@@ -83,13 +96,18 @@ export const AboutProduct = () => {
 
             {/* right side */}
             <div className="space-y-10 max-w-2xl">
-              <h1 className="text-5xl font-bold ">{product?.name}</h1>
+              <h1 className="text-3xl font-bold">
+                {product?.name}{" "}
+                <Tag color={product?.status === "in_stock" ? "green" : "red"}>
+                  {product?.status}
+                </Tag>
+              </h1>
 
               <p className="font-medium text-red-500">
                 <span className="bg-gray-100 px-5 py-2 text-black rounded-md font-medium">
                   Price
                 </span>{" "}
-                : Rs. {product?.price}
+                : $ {product?.price}
               </p>
 
               <p className="font-medium">
@@ -98,6 +116,25 @@ export const AboutProduct = () => {
                 </span>{" "}
                 : {product?.quantity}
               </p>
+
+              <div className="font-medium">
+                <span className="bg-gray-100 px-5 py-2 rounded-md font-medium">
+                  Rating
+                </span>{" "}
+                :{" "}
+                <Rate
+                  allowHalf
+                  value={
+                    product?.reviews?.length
+                      ? product.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) / product.reviews.length
+                      : 0
+                  }
+                  disabled
+                />
+              </div>
 
               <div className="font-medium">
                 <span className="bg-gray-100 px-5 py-2 rounded-md font-medium">
@@ -118,6 +155,7 @@ export const AboutProduct = () => {
                   type="primary"
                   onClick={handleAddToCart}
                   loading={isLoading}
+                  disabled={product?.quantity === 0}
                 >
                   Add to Cart
                 </Button>
@@ -126,6 +164,7 @@ export const AboutProduct = () => {
                   <Button
                     className="text-lg w-96 py-5  bg-green-600 hover:!bg-green-500"
                     type="primary"
+                    disabled={product?.quantity === 0}
                   >
                     Buy it now
                   </Button>
@@ -142,8 +181,22 @@ export const AboutProduct = () => {
             </div>
           </section>
 
+          {/* Reviews */}
+          {product?.reviews?.length > 0 && (
+            <section className="md:w-[70%] m-auto my-10 space-y-5">
+              <h1 className="text-2xl font-semibold">Reviews</h1>
+              {reviews.map((review) => (
+                <div key={review._id} className="border p-4 bg-gray-100">
+                  <Rate value={review.rating} disabled />
+                  <p>{review.comment}</p>
+                </div>
+              ))}
+              <Pagination className="float-end" />
+            </section>
+          )}
+
           {/* question and answer */}
-          <section className="w-1/2 m-auto my-10 space-y-5">
+          <section className="md:w-[70%] m-auto my-10 space-y-5">
             <h1 className="text-2xl font-semibold">Questions and Answers</h1>
             <div className="border p-4 space-y-3">
               {!getLocalStore("accessToken") ? (
