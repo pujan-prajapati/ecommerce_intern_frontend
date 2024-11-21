@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-export const Collections = () => {
+export const Comments = () => {
   return (
     <>
       <Outlet />

@@ -104,6 +104,7 @@ export const MyOrder = () => {
         rowKey={"_id"}
         loading={isLoading}
         pagination={{
+          className: "text-white",
           pageSize: 10,
           current: currentPage,
           total: totalCount, // Use totalCount here for correct pagination

@@ -8,6 +8,7 @@ import {
   FaClipboardCheck,
   FaBox,
   FaDelicious,
+  FaComment,
 } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
@@ -74,6 +75,11 @@ const menuItems = [
     key: "orders",
     icon: <FaDelicious />,
     label: <NavLink to="/admin/orders">Orders</NavLink>,
+  },
+  {
+    key: "comments",
+    icon: <FaComment />,
+    label: <NavLink to="/admin/comments">Comments</NavLink>,
   },
 ];
 

@@ -3,9 +3,13 @@ import { httpGet, httpPost } from "../../../axios";
 
 export const addReview = createAsyncThunk(
   "addReview",
-  async (formData, { rejectWithValue }) => {
+  async ({ productId, rating, comment }, { rejectWithValue }) => {
     try {
-      const response = await httpPost("/review", formData, true);
+      const response = await httpPost(
+        "/review",
+        { productId, rating, comment },
+        true
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

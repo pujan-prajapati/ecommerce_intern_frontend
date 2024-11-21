@@ -56,22 +56,24 @@ export const Products = () => {
           {products.map((product) => (
             <div
               key={product._id}
-              className="h-[300px] relative bg-gray-100 hover:shadow-lg transition-all duration-300"
+              className="h-[300px] relative bg-gray-100 rounded-md  hover:shadow-lg dark:shadow-gray-200 transition-all duration-300"
             >
               <Link to={`/products/${product._id}`}>
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="h-52 w-full bg-gray-50 object-contain"
+                  className="h-52 w-full rounded-md bg-gray-50 object-contain"
                 />
               </Link>
               <div className="p-3 space-y-2 ">
-                <p className="text-lg">
+                <p className="text-lg ">
                   {product.name.length > 50
                     ? `${product.name.slice(0, 50)}...`
                     : product.name}
                 </p>
-                <p className="text-xl text-red-500 ">$ {product.price}</p>
+                <p className="text-xl  text-red-500 dark:text-red-500 ">
+                  $ {product.price}
+                </p>
                 <div
                   className="absolute bottom-4 right-4 cursor-pointer"
                   onClick={() => handleLike(product._id)}

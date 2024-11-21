@@ -176,7 +176,6 @@ export const WishList = () => {
             rowKey={"_id"}
             rowSelection={rowSelection}
             bordered
-            className="custom-table-row border rounded-lg "
           />
         ) : (
           <p className="text-center text-lg font-semibold">

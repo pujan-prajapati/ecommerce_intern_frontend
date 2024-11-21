@@ -14,11 +14,35 @@ export const addComment = createAsyncThunk(
   }
 );
 
+export const getAllComments = createAsyncThunk(
+  "getAllComments",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await httpGet("/comment");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getComments = createAsyncThunk(
   "getComments",
   async (productId, { rejectWithValue }) => {
     try {
       const response = await httpGet(`/comment/${productId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getCommentById = createAsyncThunk(
+  "getCommentById",
+  async (commentId, { rejectWithValue }) => {
+    try {
+      const response = await httpGet(`/comment/getCommentById/${commentId}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

@@ -25,7 +25,7 @@ import {
 } from "../../../redux/features/comments/comments.service";
 import { selectComments } from "../../../redux/features/comments/comment.slice";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
+import { FaReply, FaTrash } from "react-icons/fa";
 import { getReviews } from "../../../redux/features/reviews/reviews.service";
 import { selectReviews } from "../../../redux/features/reviews/reviews.slice";
 
@@ -185,7 +185,7 @@ export const AboutProduct = () => {
           {product?.reviews?.length > 0 && (
             <section className="md:w-[70%] m-auto my-10 space-y-5">
               <h1 className="text-2xl font-semibold">Reviews</h1>
-              {reviews.map((review) => (
+              {reviews?.map((review) => (
                 <div key={review._id} className="border p-4 bg-gray-100">
                   <Rate value={review.rating} disabled />
                   <p>{review.comment}</p>
@@ -256,6 +256,17 @@ export const AboutProduct = () => {
                       </Button>
                     )}
                   </div>
+
+                  {/* admin reply */}
+                  {comment?.reply?.map((reply) => (
+                    <div
+                      key={reply._id}
+                      className="flex gap-3 items-center bg-green-50 p-4"
+                    >
+                      <FaReply />
+                      <p>{reply.message}</p>
+                    </div>
+                  ))}
 
                   {/* admin reply
                   {getLocalStore("user")?.role === "admin" && (

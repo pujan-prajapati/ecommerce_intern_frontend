@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { selectCart } from "../../../redux/features/cart/cart.slice";
 import {
@@ -9,14 +10,15 @@ import { Button, InputNumber, Spin } from "antd";
 import { FaTrash } from "react-icons/fa";
 import { notify } from "../../../helpers";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const CartList = () => {
+export const CartList = ({ setOpen }) => {
   const token = localStorage.getItem("accessToken");
 
   const { items, isLoading, errorMsg } = useSelector(selectCart);
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState({});
+  const navigate = useNavigate();
 
   const deleteCartItem = async (productId) => {
     try {
@@ -36,13 +38,18 @@ export const CartList = () => {
   const handleQuantityBlurOrEnter = async (productId) => {
     const qty = quantity[productId] || 1; // Use local state value
     await dispatch(updateCart({ productId, quantity: qty }));
-    dispatch(getCart()); // Fetch updated cart
+    dispatch(getCart());
   };
 
   const handleKeyDown = (event, productId) => {
     if (event.key === "Enter") {
       handleQuantityBlurOrEnter(productId);
     }
+  };
+
+  const handleBuyNow = () => {
+    setOpen(false);
+    navigate("/cart/buy");
   };
 
   if (isLoading) {
@@ -65,7 +72,9 @@ export const CartList = () => {
           </div>
         )}
         {token && items.length === 0 ? (
-          <p className="text-center text-3xl font-semibold">Cart is empty</p>
+          <p className="text-center text-3xl font-semibold leading-loose">
+            Cart is empty.
+          </p>
         ) : (
           token &&
           items.map(
@@ -122,15 +131,14 @@ export const CartList = () => {
 
         {token && items.length !== 0 && (
           <div className="mt-auto ">
-            <Link to={"/cart/buy"}>
-              <Button
-                type="primary"
-                block
-                className=" bg-orange-500 hover:!bg-orange-600 !py-6"
-              >
-                Buy Now
-              </Button>
-            </Link>
+            <Button
+              type="primary"
+              block
+              className=" bg-orange-500 hover:!bg-orange-600 !py-6"
+              onClick={handleBuyNow}
+            >
+              Buy Now
+            </Button>
           </div>
         )}
       </div>

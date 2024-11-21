@@ -36,7 +36,7 @@ export const Contact = () => {
               alt="ContactUs tailwind section"
               className="w-full h-full lg:rounded-l-md  object-cover"
             />
-            <h1 className="text-white text-4xl font-bold absolute top-11 left-11">
+            <h1 className="text-white dark:text-white text-4xl font-bold absolute top-11 left-11">
               Contact us
             </h1>
             <div className="absolute bottom-0 w-full lg:p-11 p-5">
@@ -72,7 +72,7 @@ export const Contact = () => {
           </div>
 
           <div className="bg-gray-50 p-5 lg:p-11 lg:rounded-r-md ">
-            <h2 className="text-orange-600 font-manrope text-4xl font-semibold leading-10 mb-11">
+            <h2 className="text-orange-600 dark:text-orange-600 font-manrope text-4xl font-semibold leading-10 mb-11">
               Send Us A Message
             </h2>
 

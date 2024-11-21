@@ -5,6 +5,7 @@ import {
   Accounts,
   Category,
   Orders,
+  Comments,
 } from "../pages/admin";
 
 import {
@@ -21,6 +22,8 @@ import {
   CategoryProductList,
   OrderList,
   OrderStatusEdit,
+  CommentsList,
+  CommentsReply,
 } from "../components/admin";
 import { HomeLayout, AdminLayout } from "../layout";
 import {
@@ -115,6 +118,11 @@ export const AppRoutes = () => {
           <Route path="orders" element={<Orders />}>
             <Route index element={<OrderList />} />
             <Route path="edit/:id" element={<OrderStatusEdit />} />
+          </Route>
+
+          <Route path="comments" element={<Comments />}>
+            <Route index element={<CommentsList />} />
+            <Route path=":id" element={<CommentsReply />} />
           </Route>
         </Route>
 

@@ -9,13 +9,42 @@
   font-size: 14px;
 }
 
+html.dark,
+body.dark {
+  background-color: #2f2f2f;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  @apply dark:text-gray-100;
+}
+
+div > h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  @apply dark:text-gray-800;
+}
+
+a {
+  @apply dark:text-gray-100;
+}
+
 .logo {
   font-family: "Dancing Script", cursive;
   font-weight: 900;
 }
 
 .active {
-  @apply text-orange-600 font-semibold;
+  @apply text-orange-600 dark:text-orange-600 font-semibold;
 }
 
 .nav-links a:hover {

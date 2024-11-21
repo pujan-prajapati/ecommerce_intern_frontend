@@ -1,30 +1,65 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Wrapper } from "../global/wrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProduct } from "../../../redux/features/products/product.slice";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getAllProducts } from "../../../redux/features/products/product.service";
 import { ProductSidebar } from "../global/productSidebar";
 import { Pagination, Spin } from "antd";
+import { getLocalStore, notify, setLocalStore } from "../../../helpers";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../../redux/features/wishlist/wishlist.service";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 export const SearchProducts = () => {
+  const user = getLocalStore("user");
+
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const searchValue = searchParams.get("search") || "";
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { products, isLoading, totalPages, currentPage, totalProducts } =
     useSelector(selectProduct);
+  const [wishlist, setWishlist] = useState(user?.wishlist || []);
 
   useEffect(() => {
     dispatch(getAllProducts({ page: 1, limit: 10, search: searchValue }));
   }, [dispatch, searchValue]);
 
+  const handleLike = useCallback(
+    (id) => {
+      const token = getLocalStore("accessToken");
+      if (token) {
+        let updatedWishlist;
+        if (wishlist.includes(id)) {
+          updatedWishlist = wishlist.filter((item) => item !== id);
+          dispatch(removeFromWishlist(id));
+          notify("Item removed from wishlist");
+        } else {
+          updatedWishlist = [...wishlist, id];
+          dispatch(addToWishlist(id));
+          notify("Item added to wishlist");
+        }
+
+        setWishlist(updatedWishlist);
+        const updatedUser = { ...user, wishlist: updatedWishlist };
+        setLocalStore("user", updatedUser);
+      } else {
+        navigate("/login");
+      }
+    },
+    [dispatch, wishlist, user, navigate]
+  );
+
   return (
     <>
       <Wrapper className="flex py-0 gap-4">
         <div className="w-[20.8333%]">
-          <ProductSidebar searchValue={searchValue} />
+          <ProductSidebar searchValue={searchValue} products={products} />
         </div>
         <div className="flex-1">
           <section>
@@ -57,6 +92,24 @@ export const SearchProducts = () => {
                           ? product.description.slice(0, 50) + "..."
                           : product.description}
                       </p>
+                    </div>
+
+                    <div
+                      className="absolute bottom-4 right-4 cursor-pointer"
+                      onClick={() => handleLike(product._id)}
+                      aria-label={`Add or remove ${product.name} from wishlist`}
+                    >
+                      {wishlist.includes(product._id) ? (
+                        <FaHeart
+                          aria-label="Added to wishlist"
+                          className="w-6 h-6 text-red-500"
+                        />
+                      ) : (
+                        <FaRegHeart
+                          aria-label="Add to wishlist"
+                          className="w-6 h-6"
+                        />
+                      )}
                     </div>
                   </div>
                 ))

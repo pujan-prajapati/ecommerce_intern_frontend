@@ -1,6 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Wrapper } from "../wrapper";
-import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import {
+  FaMoon,
+  FaSearch,
+  FaShoppingCart,
+  FaSun,
+  FaUser,
+} from "react-icons/fa";
 import { Avatar, Badge, Button, Drawer, Dropdown, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuth } from "../../../../redux/features/auth/auth.slice";
@@ -20,12 +26,21 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     if (token) {
       dispatch(getCart());
     }
   }, [dispatch, token]);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.setAttribute("class", "dark");
+    } else {
+      document.body.setAttribute("class", "");
+    }
+  }, [isDarkMode]);
 
   const showDrawer = () => {
     dispatch(getCart());
@@ -37,13 +52,17 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    setSearchValue("");
     notify("Logged Out Successfully");
     navigate("/login");
   };
 
   const items = [
-    { key: 1, label: <NavLink to="/orders">Orders</NavLink> },
-    { key: 2, label: <NavLink to="/wishlist">Wishlist</NavLink> },
+    { key: 1, label: <NavLink to="/orders">My Orders</NavLink> },
+    {
+      key: 2,
+      label: <NavLink to="/wishlist">My Wishlist</NavLink>,
+    },
     ...(user && user.role === "admin"
       ? [{ key: 3, label: <NavLink to="/admin">Dashboard</NavLink> }]
       : []),
@@ -61,7 +80,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="shadow-sm">
+      <nav className="shadow-sm  dark:shadow-gray-300">
         <Wrapper className="flex justify-between items-center">
           <Link to="/" className="logo text-3xl">
             LOGO.
@@ -87,6 +106,8 @@ export const Navbar = () => {
           <div className="nav-links flex gap-8 items-center">
             <NavLink to={"/"}>Home</NavLink>
             <NavLink to={"/contact"}>Contact</NavLink>
+
+            {/* cart */}
             <Badge
               count={(token && cartItems?.length) || 0}
               size="small"
@@ -94,12 +115,21 @@ export const Navbar = () => {
               onClick={showDrawer}
               className="cursor-pointer"
             >
-              <FaShoppingCart />
+              <FaShoppingCart className="dark:text-gray-100" />
             </Badge>
             <Drawer onClose={onClose} width={500} title="Cart" open={open}>
-              <CartList />
+              <CartList setOpen={setOpen} />
             </Drawer>
 
+            {/* Dark Mode Toggle */}
+            <Button
+              type="text"
+              icon={isDarkMode ? <FaSun /> : <FaMoon />}
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="dark:text-orange-400 dark:hover:!text-orange-500"
+            />
+
+            {/* avatar */}
             {user ? (
               <Dropdown
                 menu={{

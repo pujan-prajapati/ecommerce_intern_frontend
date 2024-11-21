@@ -16,6 +16,8 @@ import {
 
 import { OrderList, OrderStatusEdit } from "./orders";
 
+import { CommentsList, CommentsReply } from "./comments";
+
 export {
   ProductList,
   ProductCreate,
@@ -30,4 +32,6 @@ export {
   CategoryProductList,
   OrderList,
   OrderStatusEdit,
+  CommentsList,
+  CommentsReply,
 };

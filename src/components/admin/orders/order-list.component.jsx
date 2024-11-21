@@ -9,8 +9,7 @@ import {
 } from "../../../redux/features/orders/order.service";
 import { TableActionBtn } from "../common/TableActionBtn";
 import Swal from "sweetalert2";
-import { FaRegEye, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaTrash } from "react-icons/fa";
 
 const columns = [
   {
@@ -82,12 +81,6 @@ const columns = [
     width: 200,
     render: (text, record) => (
       <div className="flex gap-3">
-        {/* TODO: Add view order details link */}
-        <Link to={``}>
-          <Button type="primary" className="bg-orange-500 hover:!bg-orange-600">
-            <FaRegEye />
-          </Button>
-        </Link>
         <TableActionBtn
           to={`/admin/orders/edit/${record._id}`}
           id={record._id}
