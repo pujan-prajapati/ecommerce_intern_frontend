@@ -8,6 +8,7 @@ import orderReducer from "./features/orders/order.slice";
 import wishlistReducer from "./features/wishlist/wishlist.slice";
 import commentReducer from "./features/comments/comment.slice";
 import reviewsReducer from "./features/reviews/reviews.slice";
+import statsReducer from "./features/stats/stats.slice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     comments: commentReducer,
     reviews: reviewsReducer,
+    stats: statsReducer,
   },
 });

@@ -1,5 +1,5 @@
 import { Button, Form, Input, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthHeader } from "../AuthHeader";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,6 +60,7 @@ export const LoginComponent = () => {
           onFinishFailed={handleFormFailed}
           wrapperCol={{ span: 16 }}
           labelCol={{ span: 4 }}
+          labelAlign="left"
           className="max-w-[600px] w-full"
         >
           <Form.Item
@@ -104,6 +105,20 @@ export const LoginComponent = () => {
             <Button type="primary" loading={isLoading} htmlType="submit">
               Submit
             </Button>
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              span: 16,
+              offset: 4,
+            }}
+          >
+            <Link
+              to={"/forgot-password"}
+              className="text-blue-500 hover:underline"
+            >
+              Forgot Password?
+            </Link>
           </Form.Item>
         </Form>
       </div>

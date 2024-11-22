@@ -1,4 +1,4 @@
-import { HomeHeader, Navbar, Wrapper } from "./global";
+import { HomeHeader, Navbar, Wrapper, Footer } from "./global";
 import { CarouselComponent } from "./homeComponent/Carousel.component";
 import { AboutProduct } from "./ProductComponent/AboutProduct";
 import { BuyProduct } from "./ProductComponent/BuyProduct";
@@ -8,6 +8,7 @@ import { CategoryProducts } from "./CategoryComponent";
 export {
   Navbar,
   Wrapper,
+  Footer,
   CarouselComponent,
   HomeHeader,
   AboutProduct,

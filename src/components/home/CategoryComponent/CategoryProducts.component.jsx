@@ -55,7 +55,7 @@ export const CategoryProducts = () => {
     <>
       <Wrapper>
         <section className="flex gap-5 mt-5">
-          <div className="w-[20.8333%]">
+          <div className="w-[20.8333%] ">
             <ProductSidebar
               searchValue={products?.[0]?.category?.name}
               products={products}
@@ -64,10 +64,12 @@ export const CategoryProducts = () => {
           <div className="flex-1">
             <section>
               <div className="mb-5">
-                <h1 className="text-3xl font-bold">
+                <h1 className="text-3xl font-bold dark:text-white">
                   Product: {products?.[0]?.category?.name}
                 </h1>
-                <p>Total: {products?.length} Products</p>
+                <p className="dark:text-white">
+                  Total: {products?.length} Products
+                </p>
               </div>
               {isLoading ? (
                 <Spin className="flex justify-center items-center" />

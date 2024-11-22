@@ -96,22 +96,22 @@ export const AboutProduct = () => {
 
             {/* right side */}
             <div className="space-y-10 max-w-2xl">
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-3xl font-bold dark:text-white">
                 {product?.name}{" "}
                 <Tag color={product?.status === "in_stock" ? "green" : "red"}>
                   {product?.status}
                 </Tag>
               </h1>
 
-              <p className="font-medium text-red-500">
+              <p className="font-medium text-red-500 dark:text-white">
                 <span className="bg-gray-100 px-5 py-2 text-black rounded-md font-medium">
                   Price
                 </span>{" "}
                 : $ {product?.price}
               </p>
 
-              <p className="font-medium">
-                <span className="bg-gray-100 px-5 py-2 rounded-md font-medium">
+              <p className="font-medium dark:text-white">
+                <span className="bg-gray-100 dark:text-black px-5 py-2 rounded-md font-medium">
                   Available
                 </span>{" "}
                 : {product?.quantity}
@@ -171,8 +171,8 @@ export const AboutProduct = () => {
                 </Link>
               </div>
 
-              <p>
-                <span className="bg-gray-100 px-5 py-2 rounded-md font-medium">
+              <p className="dark:text-white">
+                <span className="bg-gray-100 dark:text-black px-5 py-2 rounded-md font-medium">
                   Description
                 </span>
                 <br />
@@ -239,8 +239,8 @@ export const AboutProduct = () => {
                 <div key={comment._id} className="border p-4 space-y-3">
                   <div className="  flex justify-between items-center">
                     <div className="flex gap-3 items-center">
-                      <BsFillQuestionSquareFill className="w-5 h-5" />
-                      <p>{comment.comment}</p>
+                      <BsFillQuestionSquareFill className="w-5 h-5 dark:text-white" />
+                      <p className="dark:text-white">{comment.comment}</p>
                     </div>
                     {(comment?.user === getLocalStore("user")?._id ||
                       getLocalStore("user")?.role === "admin") && (

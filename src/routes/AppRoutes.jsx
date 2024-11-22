@@ -45,6 +45,7 @@ import {
   CategoryProducts,
   SearchProducts,
 } from "../components/home";
+import { ChangePassword, ForgotPassword, OTPVerify } from "../components/auth";
 
 export const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -59,6 +60,11 @@ export const AppRoutes = () => {
             path="/login"
             element={token ? <Navigate to={"/"} /> : <LoginPage />}
           />
+
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="otp-verify" element={<OTPVerify />} />
+          <Route path="change-password" element={<ChangePassword />} />
+
           <Route
             path="/register"
             element={token ? <Navigate to={"/"} /> : <RegisterPage />}

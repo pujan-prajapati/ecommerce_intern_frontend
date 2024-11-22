@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa"; // Import the icons
 import {
   LineChart,
@@ -9,58 +9,23 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useDispatch, useSelector } from "react-redux";
+import { getSales, getStats } from "../../redux/features/stats/stats.service";
+import { selectStats } from "../../redux/features/stats/stats.slice";
 
 export const Dashboard = () => {
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    newUsers: 0,
-    totalSales: 0,
-    totalOrders: 0,
-    pendingOrders: 0,
-    totalProducts: 0,
-    outOfStockProducts: 0,
-  });
+  const dispatch = useDispatch();
 
-  const [salesData, setSalesData] = useState([]);
+  const { isLoading, salesData, isError, errorMsg, stats } =
+    useSelector(selectStats);
 
   useEffect(() => {
-    const generateRandomStats = () => {
-      setStats({
-        totalUsers: Math.floor(Math.random() * 1000 + 500),
-        newUsers: Math.floor(Math.random() * 100 + 10),
-        totalSales: Math.floor(Math.random() * 100000 + 10000),
-        totalOrders: Math.floor(Math.random() * 500 + 100),
-        pendingOrders: Math.floor(Math.random() * 50 + 5),
-        totalProducts: Math.floor(Math.random() * 1000 + 300),
-        outOfStockProducts: Math.floor(Math.random() * 100 + 1),
-      });
-    };
+    dispatch(getStats());
+    dispatch(getSales());
+  }, [dispatch]);
 
-    const generateSalesData = () => {
-      const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-      ];
-      const data = months.map((month) => ({
-        month,
-        sales: Math.floor(Math.random() * 10000 + 1000), // Random sales data
-      }));
-      setSalesData(data);
-    };
-
-    generateRandomStats();
-    generateSalesData();
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p className="text-red-500">{errorMsg}</p>;
 
   return (
     <>
